@@ -19,7 +19,8 @@ Follow this routine:
    - Keyword opportunity / content gap / cluster → **keyword-strategist** agent (skill: seo-agency PB-3/4/10)
    - AI search / GEO / AEO / llms.txt → **geo-analyst** agent (skill: seo-geo)
    - Write / draft an article → **article-writer** agent (skill: singrank-article-writer)
-   - Execute a fix on Wix/Shopify → **platform-executor** agent (skill: seo-platforms)
+   - Execute a content/metafield fix on Wix/Shopify → **platform-executor** agent (skill: seo-platforms)
+   - Edit theme code / Liquid / sections / JSON templates on Shopify → **shopify-theme-engineer** agent (skill: shopify-theme-liquid)
    - Monthly report / client update → **report-builder** agent (skill: seo-agency PB-8)
    - Client traffic/trend question → **seo-kb** skill
    - Full campaign "dari idea sampai publish" → **singrank-pipeline** skill (or /seo-win)

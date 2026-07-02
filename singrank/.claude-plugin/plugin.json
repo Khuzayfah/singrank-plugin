@@ -1,7 +1,7 @@
 {
   "name": "singrank",
-  "version": "2.0.0",
-  "description": "SingRank SEO/GEO agency system — master playbook (10 scoring formulas + client roster), winning pipeline (idea → publish → track), 7 specialist agents, 9 commands, and 8 skills covering audits, recovery, keywords, GEO/AI-search, Wix/Shopify execution, articles, and reporting for Singapore & Indonesia clients.",
+  "version": "2.1.0",
+  "description": "SingRank SEO/GEO agency system — master playbook (10 scoring formulas + client roster), winning pipeline (idea → publish → track), 8 specialist agents, 10 commands, and 9 skills covering audits, recovery, keywords, GEO/AI-search, Wix/Shopify execution, advanced Shopify theme/Liquid engineering, articles, and reporting for Singapore & Indonesia clients.",
   "author": {
     "name": "Khuzayfah Redo",
     "email": "naturalgifts.sg@gmail.com"

@@ -22,9 +22,9 @@ singrank-playbook  ← operating system: 10 formulas, principles, client roster
         │
 singrank-pipeline  ← the winning flow: 10 stages, idea → publish → track
         │
-   7 specialist agents execute the stages
+   8 specialist agents execute the stages
         │
-   9 slash commands trigger everything
+   10 slash commands trigger everything
 ```
 
 ## Slash commands
@@ -40,6 +40,7 @@ singrank-pipeline  ← the winning flow: 10 stages, idea → publish → track
 | `/seo-geo [client]` | GEO/AEO audit — AI visibility, citability, llms.txt, F9 efficiency |
 | `/seo-report [client]` | Client-ready monthly report, statistically honest (SDS-gated claims) |
 | `/seo-fix [client+change]` | Execute an approved change on Wix/Shopify — draft-first, never delete |
+| `/seo-theme [client+change]` | Edit/push Shopify theme code — Liquid, sections, JSON templates, verify-first |
 
 ## Specialist agents
 
@@ -50,7 +51,8 @@ singrank-pipeline  ← the winning flow: 10 stages, idea → publish → track
 | `keyword-strategist` | ROS/Priority-scored opportunities, improve-vs-create, clusters |
 | `geo-analyst` | AI-search visibility, citability, llms.txt, brand-radar benchmarks |
 | `article-writer` | 2500+ word humanized zero-fabrication articles (SG/ID markets) |
-| `platform-executor` | Wix/Shopify writes — exact MCP calls, per-client gotchas, draft-first |
+| `platform-executor` | Wix/Shopify content/metafield writes — exact MCP calls, per-client gotchas, draft-first |
+| `shopify-theme-engineer` | Shopify theme/Liquid code — sections, schema, JSON templates, verify-first mutations |
 | `report-builder` | Honest client reports; noise never reported as change |
 
 ## Skills
@@ -62,7 +64,8 @@ singrank-pipeline  ← the winning flow: 10 stages, idea → publish → track
 | `seo-agency` | Agency playbooks: recovery, keywords, gaps, cannibalization, orphans, local, clusters, reports |
 | `seo-audit` | 20-category technical audit procedure |
 | `seo-geo` | GEO/AEO deep procedures — crawler access, citability, llms.txt, SoV |
-| `seo-platforms` | Wix & Shopify implementation patterns and gotchas |
+| `seo-platforms` | Wix & Shopify content/metafield implementation patterns and gotchas |
+| `shopify-theme-liquid` | Advanced Shopify theme engineering — Liquid, JSON templates, section schema, verified GraphQL theme mutations |
 | `seo-kb` | Local trend brain over SingRank dashboard data |
 | `singrank-article-writer` | Article-writing standard (floors, magnets, schema, voice) |
 

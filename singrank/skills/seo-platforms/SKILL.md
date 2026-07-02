@@ -12,13 +12,19 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [Wix, Shopify, Technical, Implementation, Schema, Meta, CWV, Platform]
-    related_skills: [seo-agency, seo-audit, seo-geo, singrank-article-writer]
+    related_skills: [seo-agency, seo-audit, seo-geo, singrank-article-writer, shopify-theme-liquid]
 ---
 
 # SingRank Platform SEO — Wix + Shopify v1.0
 
 Execution-layer skill. Assumes audit findings already identified (via `seo-audit` or
 `seo-agency` playbooks). This skill implements the fixes on the actual CMS platforms.
+
+**Scope note:** this skill covers content and metafield-level fixes (meta
+tags, schema via metafields/theme snippets, body content, internal links).
+For anything that edits actual theme CODE — Liquid files, section schema,
+JSON templates, theme file pushes/publishing — use the deeper
+`shopify-theme-liquid` skill and the `shopify-theme-engineer` agent instead.
 
 **Golden rules (apply to both platforms):**
 - NEVER delete articles, pages, products, or collections

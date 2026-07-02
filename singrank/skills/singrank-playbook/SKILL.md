@@ -14,7 +14,7 @@ platforms: [linux, macos, windows]
 metadata:
   singrank:
     tags: [SEO, GEO, Agency, Scoring, Playbook]
-    related_skills: [seo-agency, seo-audit, seo-geo, seo-platforms, singrank-article-writer, singrank-pipeline]
+    related_skills: [seo-agency, seo-audit, seo-geo, seo-platforms, shopify-theme-liquid, singrank-article-writer, singrank-pipeline]
 ---
 
 # SingRank Master Playbook
@@ -204,7 +204,8 @@ PRIORITY:   [number from F1]
 | "local SEO" / "GBP" / "local pack" | **seo-agency** → PB-9 |
 | "topical authority" / "cluster" / "pillar" | **seo-agency** → PB-10 |
 | "GEO" / "AI search" / "llms.txt" | `geo_briefing` → **seo-geo** |
-| "fix Wix" / "fix Shopify" / schema / meta | **seo-platforms** |
+| "fix Wix" / "fix Shopify" / schema / meta (content/metafield level) | **seo-platforms** |
+| "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |
 | "tulis artikel" / "write article" | **singrank-article-writer** |
 | "laporan bulanan" / "monthly report" | `client_action_briefing` → **seo-agency** PB-8 |
 | "tren klien" / "how is X doing" | `bootstrap_briefing` → **seo-kb** |
