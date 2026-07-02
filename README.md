@@ -1,6 +1,8 @@
 # SingRank SEO Plugin
 
-A Claude Code plugin bundling the SingRank SEO/GEO agency toolkit for Singapore & Indonesia clients: technical audits, ranking recovery, keyword & content-gap analysis, cannibalization checks, GEO/AI-search visibility, Wix/Shopify platform fixes, and long-form article writing.
+The complete SingRank SEO/GEO agency system as a Claude Code plugin — the full
+way we win for Singapore & Indonesia clients, from idea discovery to a
+published, interlinked, GEO-ready, tracked article.
 
 ## Install
 
@@ -11,27 +13,80 @@ In Claude Code:
 /plugin install singrank@singrank-plugin
 ```
 
-Then restart Claude Code (or reload) so the skills and command register.
+Then restart/reload Claude Code so the skills, agents, and commands register.
 
-## What's included
+## The system
 
-### Slash command
-- `/seo [task]` — routes an SEO/GEO task to the right skill and starts with live MCP data.
+```
+singrank-playbook  ← operating system: 10 formulas, principles, client roster
+        │
+singrank-pipeline  ← the winning flow: 10 stages, idea → publish → track
+        │
+   7 specialist agents execute the stages
+        │
+   9 slash commands trigger everything
+```
 
-### Skills (auto-invoked by trigger phrases)
-| Skill | Use for | Trigger examples |
-|---|---|---|
-| `seo-agency` | Master agency workflow — audits, recovery, keyword/content-gap, cannibalization, orphans, reports, strategy | "audit", "ranking turun", "cari keyword", "content gap", "laporan bulanan" |
-| `seo-audit` | Full 20-category technical audit with weighted scoring, CWV, schema, E-E-A-T | "full audit", "technical SEO", "core web vitals", "schema audit" |
-| `seo-geo` | GEO/AEO — AI search visibility, llms.txt, citability, AI Share of Voice | "AI search", "GEO", "llms.txt", "Perplexity citation" |
-| `seo-platforms` | Wix & Shopify implementation — meta, schema, internal links, gotchas | "fix di Wix", "update Shopify", "inject schema" |
-| `seo-kb` | Local trend brain over SingRank dashboard data | "how is X doing", "trend klien", "traffic naik/turun" |
-| `singrank-article-writer` | 2500+ word humanized, zero-fabrication SEO/AEO/GEO articles from a brief | "tulis artikel", "write article", "draft article for [client]" |
+## Slash commands
 
-## Notes
+| Command | What it does |
+|---|---|
+| `/seo [task]` | Router — sends any SEO/GEO task to the right agent/skill with live MCP data |
+| `/seo-win [client] [topic]` | **Full winning pipeline**: baseline → structure → discover → prioritize → recon → brief → write → publish → interlink → track |
+| `/seo-audit [client]` | Full 20-category technical audit, F1-Priority sorted |
+| `/seo-recovery [client]` | Ranking-drop forensics (SDS-validated) + RPS-scored recovery plan |
+| `/seo-keywords [client]` | ROS-scored keyword & content opportunities + cluster map |
+| `/seo-article [client+topic]` | ≥2500w zero-fabrication SEO/AEO/GEO article from a verified brief |
+| `/seo-geo [client]` | GEO/AEO audit — AI visibility, citability, llms.txt, F9 efficiency |
+| `/seo-report [client]` | Client-ready monthly report, statistically honest (SDS-gated claims) |
+| `/seo-fix [client+change]` | Execute an approved change on Wix/Shopify — draft-first, never delete |
 
-- The skills expect the SingRank / Ahrefs / Semrush MCP servers to be connected for live data.
-- No client content is ever deleted — fixes are done via rewrite, redirect, canonical, strengthen, or interlink.
+## Specialist agents
+
+| Agent | Specialty |
+|---|---|
+| `seo-auditor` | 20-category technical audit with weighted scoring |
+| `ranking-recovery` | Drop forensics: SDS significance → cause → RPS routing |
+| `keyword-strategist` | ROS/Priority-scored opportunities, improve-vs-create, clusters |
+| `geo-analyst` | AI-search visibility, citability, llms.txt, brand-radar benchmarks |
+| `article-writer` | 2500+ word humanized zero-fabrication articles (SG/ID markets) |
+| `platform-executor` | Wix/Shopify writes — exact MCP calls, per-client gotchas, draft-first |
+| `report-builder` | Honest client reports; noise never reported as change |
+
+## Skills
+
+| Skill | Use for |
+|---|---|
+| `singrank-playbook` | **Master rules** — mandatory MCP pull order, formulas F1–F10, operating principles, output format, client roster + constraints |
+| `singrank-pipeline` | **The winning flow** — 10 gated stages from idea to tracked result |
+| `seo-agency` | Agency playbooks: recovery, keywords, gaps, cannibalization, orphans, local, clusters, reports |
+| `seo-audit` | 20-category technical audit procedure |
+| `seo-geo` | GEO/AEO deep procedures — crawler access, citability, llms.txt, SoV |
+| `seo-platforms` | Wix & Shopify implementation patterns and gotchas |
+| `seo-kb` | Local trend brain over SingRank dashboard data |
+| `singrank-article-writer` | Article-writing standard (floors, magnets, schema, voice) |
+
+## The formulas (in singrank-playbook)
+
+F1 Priority · F2 ROS (ranking opportunity) · F3 SDS (statistical drift) ·
+F4 RPS (recovery probability) · F5 content decay · F6 cannibalization
+overlap · F7 near-orphan priority · F8 HHI anchor risk · F9 GEO citation
+efficiency · F10 Bayesian confidence. Every score is shown with its
+calculation — no hand-waving.
+
+## Non-negotiables baked into everything
+
+- **Live data first** — SingRank System / Ahrefs / Semrush MCPs; never guess numbers
+- **Never delete client content** — rewrite → redirect → canonical → strengthen → interlink
+- **Zero fabrication** — no source, no sentence
+- **Draft-first publishing** — nothing goes live without approval
+- **Statistical honesty** — SDS <1.65 is noise, reported as stable
+- **Client isolation** — one client's data never leaks into another's work
+
+## Requirements
+
+The skills expect the **SingRank System**, **Ahrefs**, and **Semrush** MCP
+servers connected (plus **Wix** / **Shopify** MCPs for execution).
 
 ## License
 
