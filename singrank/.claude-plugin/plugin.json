@@ -1,0 +1,13 @@
+{
+  "name": "singrank",
+  "version": "1.0.0",
+  "description": "SingRank SEO/GEO agency toolkit — audits, ranking recovery, keyword & content-gap analysis, cannibalization, GEO/AI-search visibility, Wix/Shopify platform fixes, and long-form article writing for Singapore & Indonesia clients.",
+  "author": {
+    "name": "Khuzayfah Redo",
+    "email": "naturalgifts.sg@gmail.com"
+  },
+  "homepage": "https://github.com/Khuzayfah/singrank-plugin",
+  "repository": "https://github.com/Khuzayfah/singrank-plugin",
+  "license": "MIT",
+  "keywords": ["seo", "geo", "aeo", "ai-search", "singapore", "indonesia", "audit", "content"]
+}
