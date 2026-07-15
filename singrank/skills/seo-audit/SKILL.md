@@ -12,7 +12,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [SEO, Technical, Audit, CWV, Schema, E-E-A-T, Crawl, Performance]
-    related_skills: [seo-agency, seo-geo, seo-platforms, scrapling, page-agent]
+    related_skills: [seo-agency, seo-geo, seo-platforms]
 ---
 
 # SingRank Technical SEO Audit v1.0
@@ -24,38 +24,51 @@ For Wix or Shopify-specific fix implementation, hand off to `seo-platforms` skil
 
 ## STEP 0 — Data Pull (Required Before Audit)
 
-**SingRank MCP (primary):**
+**Fast path — zero tool calls:** `brain{doc:'audit'}` returns the per-client FULL technical
+audit (site health v2 + index coverage + links + CWV), already fused with a ranked DO-NEXT
+list, regenerated nightly at 03:45 WIB. Read this first. Use the live tools below only to go
+deeper than the precomputed doc, or if it's stale for this client.
+
+**SingRank MCP (primary, live):**
 ```
 list_clients            → exact domain key
-site_health             → pre-built technical health score + known issues
-gsc_summary             → baseline traffic + position
-anomalies               → algorithm-flagged issues
-top_movers              → big winners/losers (date arg required; often empty — skip if no data)
-broken_links            → pre-confirmed broken internal links
-get_internal_links      → link graph for internal link audit
-published_articles      → content inventory + freshness
-fetch_log               → data freshness check (skip if <24h since last pull)
-smart_actions           → AI-suggested priority actions (use as cross-check)
+site_health             → v2: on-page (missingTitles, duplicateTitles, thinContent,
+                           orphanPages, deadEndPages) + head/technical (noindexPages CRITICAL,
+                           missingMetaDesc, canonicalMismatch, missingOgImage, h1Issues,
+                           imagesMissingAlt, schemaIssues) + healthScore 0-100. Head-data fills
+                           in gradually as the crawler re-fetches (full refresh Sunday) — check
+                           `seoCoverage.pct`; don't claim "no issues" while coverage is still low.
+index_coverage           → REAL Google index status (GSC URL Inspection, precomputed weekly).
+                           notIndexed pages = highest-priority fix, before writing anything new.
+                           ⚠️ Returns empty until the service account has FULL permission on the
+                           GSC property — if empty, say so, don't report "no issues."
+cwv_report               → Core Web Vitals (field CrUX p75 + lab Lighthouse, precomputed weekly,
+                           with trend). ⚠️ May be empty/rate-limited without a PSI_KEY set
+                           server-side — if empty, fall back to a live PageSpeed Insights check.
+broken_links             → v2, 3 buckets: broken (internal 4xx), redirects (3xx chains — fix
+                           hops≥2 first), externalBroken (outbound 404/410/DNS). Weekly Monday refresh.
+gsc_summary              → baseline traffic + position
+anomalies                → algorithm-flagged issues
+top_movers               → big winners/losers (date arg required; often empty — skip if no data)
+get_internal_links       → link graph for internal link audit
+published_articles       → content inventory + freshness
+fetch_log                → data freshness check (skip if <24h since last pull)
+smart_actions            → AI-suggested priority actions (use as cross-check)
 ```
 
-**Ahrefs MCP (backlink + keyword data):**
+⚠️ **pullupstand.com canonicalMismatch ±25 is INTENTIONAL** — it's the June-2026
+cannibalization fix via `seo.canonical` metafield, not a bug. Don't flag it as an issue.
+
+**Ahrefs MCP (backlinks only — SingRank has no first-party backlink data):**
 ```
 mcp__claude_ai_Ahrefs__site-explorer-domain-rating     → DR score
-mcp__claude_ai_Ahrefs__site-explorer-backlinks-stats   → link profile overview
-mcp__claude_ai_Ahrefs__site-explorer-anchors           → anchor text distribution
-mcp__claude_ai_Ahrefs__site-explorer-organic-keywords  → ranking keywords + positions
-mcp__claude_ai_Ahrefs__site-audit-issues               → technical audit from Ahrefs crawler
-mcp__claude_ai_Ahrefs__gsc-keywords                    → GSC keyword data via Ahrefs
+mcp__claude_ai_Ahrefs__site-explorer-anchors           → anchor text distribution (HHI formula)
+mcp__claude_ai_Ahrefs__site-explorer-refdomains-history→ referring domain trend (link velocity)
 ```
 
-**Semrush MCP (competitive + technical):**
-```
-mcp__claude_ai_Semrush__siteaudit_research             → technical site audit
-mcp__claude_ai_Semrush__organic_research               → organic keyword rankings
-mcp__claude_ai_Semrush__overview_research              → traffic overview
-```
-
-Pull all three before scoring. SingRank is source of truth for traffic/trends; Ahrefs is source of truth for backlinks; Semrush for competitive benchmarks.
+Semrush and Ahrefs' organic-keyword/technical-audit tools are optional fallbacks for a domain
+outside SingRank's tracked footprint — for tracked clients, `site_health`/`index_coverage`/
+`cwv_report` are the source of truth (first-party, no external API dependency, no quota cost).
 
 ---
 
@@ -222,6 +235,9 @@ CLS       ≤ 0.10       0.10–0.25     > 0.25
 52% of mobile sites fail CWV in field data while passing Lighthouse lab tests.
 Lab data identifies causes; field data identifies the verdict.
 
+**Source order:** `cwv_report {domain}` first (precomputed weekly, has trend/history, zero
+live-API cost). Only fall back to a live PageSpeed Insights check if it's empty for this client.
+
 ### LCP Diagnosis (phase breakdown)
 ```
 LCP total = TTFB + Load Delay + Load Time + Render Delay
@@ -359,8 +375,8 @@ JavaScript. If your critical content (title, H1, meta, canonical, body text, sch
 is injected by JS, these crawlers see a blank shell. So does Googlebot on first crawl.
 
 **How to check:**
-1. View page raw source (`Ctrl+U` / `scrapling` raw mode) — what's in the initial HTML?
-2. Render the page (scrapling rendered mode or `page-agent`) — what's visible after JS?
+1. Raw source: `WebFetch {url}` — this is what a non-JS crawler (GPTBot, ClaudeBot, PerplexityBot, first Googlebot pass) actually sees.
+2. Rendered DOM: open the page with the `claude-in-chrome` browser tools and read the live DOM (or `read_page`) — what's visible after JS executes.
 3. Compare: if raw ≠ rendered, JS-dependent content won't reach AI crawlers.
 
 **Flags:**

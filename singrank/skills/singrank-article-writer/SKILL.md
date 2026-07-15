@@ -43,41 +43,73 @@ COMPLIANCE: [client flags]
 === END BRIEF ===
 ```
 
-If no brief exists, generate one from the SEO knowledge base — it fills CLIENT, KEYWORD
-(from real ranking data), DATA (internal verified facts), and live internal-link candidates:
+If no brief exists, generate one live from the SingRank MCP — it fuses real GSC demand with
+the article RAG store (no external API, no local script):
 
-```bash
-python C:\Users\natur\AppData\Local\hermes\seo_kb\seo_kb.py brief <domain> "<topic>"
 ```
+mcp__claude_ai_SingRank_System__content_brief {domain, keyword}
+```
+
+Returns: create-new-vs-optimise-existing decision (+ the exact existing page if one already
+ranks), search intent + recommended format, `secondaryKeywords` (real related GSC queries —
+use as H2s), `peopleAlsoAsk`, `subtopicsToCover` + `internalLinksToInclude` (from the RAG
+topical cluster, with anchors — these are CONFIRMED live pages, use them for the mandatory
+5+ internal links), `linksToBuildToThisPage`, `productCTA`, `recommendedWordCount`,
+`titleSuggestion`, and a `cannibalizationWarning` if multiple pages already rank for it. If
+`cannibalizationWarning` fires, stop and route to the cannibalization playbook before writing —
+never publish a second page competing for the same keyword.
+
+Pull `mcp__claude_ai_SingRank_System__winning_patterns {domain}` alongside the brief — it
+returns the learned feature profile of this client's own 🏆 winners vs 🪫 losers (word count,
+FAQ presence, question-headings, title patterns, numbers density). Use it as a second
+checklist layered on top of the universal standard below; it tells you what *this specific
+client's* ranking pages actually look like, not generic best practice.
 
 Then fill the GAPS (external stats/prices/regulations) with **live** research before writing —
-use the `duckduckgo-search` and `scrapling` skills to pull and verify from primary
-(gov/edu/official) sources. Never fabricate the missing data to proceed.
+use the `WebSearch` and `WebFetch` tools to pull and verify from primary (gov/edu/official)
+sources. Never fabricate the missing data to proceed.
 
-### One-command orchestrator (fastest path)
+### Writing an existing underperforming page instead of a new one
 
-For a complete first draft that already chains brief → outline → per-section passes → FAQ →
-CTA → FAQPage JSON-LD, grounded in the KB and ≥2500 words:
+If `content_brief` says optimise-existing, or the task is a rewrite: call
+`mcp__claude_ai_SingRank_System__rank_reasons {url}` first. It classifies the page
+(🏆/🪫/mid/👻 invisible) and returns `whyItRanks` (keep these traits) and `gapsToFix` (the
+exact rewrite checklist vs the winner median). Fix only the gaps — don't discard what's
+already working.
 
-```bash
-python C:\Users\natur\AppData\Local\hermes\seo_kb\seo_kb.py write <domain> "<topic>" [--type guide|cluster|pillar]
-# output: seo_kb/articles/<domain>/<slug>.html
+### Score the draft before calling it done
+
+Before handing off any draft, score it:
+
+```
+mcp__claude_ai_SingRank_System__score_draft {domain, title, text}
 ```
 
-Then YOU (this skill) refine it to full standard: verify/insert real external stats via
-`duckduckgo-search`/`scrapling` (replace every `[verify before publishing]`), tighten
-humanization, confirm all 6 keyword floors, and run the pre-publish checklist. The orchestrator
-gets you 90% there with real internal data; you make it publishable.
+Returns 0–100 + a pass/fail checklist against the client's own winner profile (word count,
+question lines, lists, numbers density, H2s, FAQ block, title patterns). Iterate until ≥80.
+It cannot score incoming-link features — those come from `content_brief`'s
+`internalLinksToInclude` / `linksToBuildToThisPage`, planned separately.
 
-## INTEGRATION WITH THE SEO KB (this is how facts stay real)
+### After publishing
 
-- **Brief & keywords:** `seo_kb.py brief` / `strategy <domain>` — primary + secondary keywords
-  come from the client's actual GSC ranking data, not guesses.
-- **Internal links:** the brief lists live, topic-relevant pages with similarity scores
-  (also `seo_kb.py links <domain>`). Use these for the mandatory 5+ internal links — they are
-  confirmed live, so they pass the publish gate.
-- **Live facts:** for any external statistic, price, regulation, or study — `duckduckgo-search`
-  / `scrapling` skills, then cite the primary source with year. The KB has NO external stats.
+Log it — this feeds the monthly validation loop that tells the agency which fixes actually
+work for this client:
+
+```
+mcp__claude_ai_SingRank_System__log_experiment {url, changes}
+```
+`changes` = comma-separated, consistent vocabulary (e.g. "new article, +5 interlinks in, faq added").
+
+## INTEGRATION WITH SINGRANK MCP (this is how facts stay real)
+
+- **Brief & keywords:** `content_brief {domain, keyword}` — primary + secondary keywords come
+  from the client's actual GSC ranking data, not guesses.
+- **Internal links:** the brief's `internalLinksToInclude` lists live, topic-relevant pages
+  with anchors. Before using any link not in that list, confirm it's live with
+  `mcp__claude_ai_SingRank_System__search_articles {query, domain}` or
+  `mcp__claude_ai_SingRank_System__get_article {url}` — never guess a URL exists.
+- **Live facts:** for any external statistic, price, regulation, or study — `WebSearch` /
+  `WebFetch`, then cite the primary source with year. The RAG store has NO external stats.
 - **Learn the craft:** study how top EN and ID writers in the client's niche structure and
   phrase trusted content; mirror their clarity and evidence density (not their words). The
   Humanization rules below operationalize this — fact-first, varied rhythm, zero AI tells.
@@ -326,8 +358,8 @@ Map AIDA across the whole article, not just the intro.
 | ablink | "Speak to our EV fleet specialists today" |
 | rajawangi | "Hubungi kami via WhatsApp +62 853-5609-1181" |
 | KG Teknik | "Tanya paket usaha laundry via WhatsApp" |
-| dehallsg | "Contact De Hall to check availability" |
-| ifgshipping | "Request a freight shipping quote from IFG" |
+| dehallsg | "Book a free 1-hour consultation with De Hall" (all cost questions route here) |
+| ifgshipping | "Request a freight shipping quote from IFG" / "Konsultasi shipping dengan Iman Yusoff" |
 
 ---
 
@@ -510,18 +542,22 @@ Allow: /
 
 | Client | Byline | Language | Hard rules |
 |---|---|---|---|
-| pullupstand | Pullupstand Editorial Team | English (SG) | Exhibition displays, SG trade shows only. Cannibalization fix via article meta ONLY — never touch collections/products/visible body |
-| saffrons | Saffrons Culinary Team | English (SG) | MUIS certified, 30-plus years, "clean halal" positioning. meta = global.title_tag metafield on Shopify |
-| ablink | Ablink EV Fleet Specialists | English (British) | Separate body price from COE. No fabricated CVES eligibility. Add CPFTA disclaimers |
-| RCS | RCS Renovation Specialists | English (SG) | HDB Licence HB-11-5877Z, BCA, PMI, BizSafe Level 3. Never mention CaseTrust |
-| yescpap | YesCPAP Clinical Team | English (SG) | **YMYL MEDICAL** — ZERO health claims without named peer-reviewed or govt source. No diagnosis language. No "cures", "treats", "proven to". HCP review required for any new health claim. Schema: MedicalBusiness |
-| rajawangi | Tim Editorial Rajawangi | Bahasa Indonesia | No pricing. WhatsApp +62 853-5609-1181. PKRT Kemenkes RI, Halal, IBPLA 2022 |
-| KG Teknik | Tim KG Teknik | Bahasa Indonesia | Batam and Pekanbaru focus only |
-| dehallsg | De Hall Venue Team | English (SG) | ZERO pricing published. Never fabricate any capacity or pricing figure |
-| ifgshipping | Iman Yusoff | English (SG) | Confirm active routes before stating. No made-up transit times or transit days |
-| livinmalaysia | Iman Yusoff | English (MY) | Weave IFG Shipping + Iman Yusoff ecosystem. Fix hallucinated internal links before publishing |
-| matchdayaffairs | Matchday Affairs Team | English (SG) | Schema: Event (mandatory for all event articles). No date fabrication |
-| edureachsg | EduReach SG Team | English (SG) | Schema: EducationalOrganization. Confirm course/programme details before stating |
+| pullupstand | Pullupstand Editorial Team | English (SG) | Exhibition displays, SG trade shows only (MBS/Suntec/SG Expo). 80%+ of event articles = real event facts, every date/venue linked to the official event page. Cannibalization fix via article meta ONLY — never touch collections/products/visible body |
+| saffrons | Saffrons Culinary Team | English (SG) | MUIS certified (state exactly), 30-plus years, "clean halal" positioning. Voice = expert food blogger; hard-sell minimal. meta = global.title_tag metafield on Shopify |
+| ablink | Ablink EV Fleet Specialists | English (British) | **NEVER state a vehicle price — link "view latest price" to the live page.** Separate body price from COE (LTA sources only). No fabricated CVES eligibility. ASAS-compliant claims. Add CPFTA disclaimers |
+| RCS | **SingRank Singapore** (author policy 2026-07-06 — team voice, not a named individual) | English (SG) | HDB Licence HB-11-5877Z, BCA, PMI, BizSafe Level 3. Never mention CaseTrust. Real package prices only, re-verified live before use |
+| yescpap | YesCPAP Clinical Team (named medical author [VERIFY] with client) | English (SG) | **YMYL MEDICAL** — ZERO health claims without named peer-reviewed or govt source. No diagnosis language. No "cures", "treats", "proven to". HCP review required for any new health claim. Medical disclaimer near foot. Schema: MedicalBusiness |
+| rajawangi | Tim Editorial Rajawangi | Bahasa Indonesia | No pricing → WhatsApp +62 853-5609-1181. PKRT Kemenkes RI, Halal, IBPLA 2022. Never guarantee income. **LANE LOCK: supplies keywords only (parfum/pewangi/sabun/chemical/agen)** — business-setup topics cross-link kgteknik.co.id, never written here |
+| KG Teknik | Tim KG Teknik | Bahasa Indonesia | Branches Batam + Pekanbaru ONLY (ships nationwide — don't imply other branches). No fabricated machine/paket prices → WhatsApp. Never guarantee income; projections need explicit assumptions. **LANE LOCK: business-setup keywords only (paket/mesin/franchise/peluang usaha)** — supplies topics cross-link rajawangi.co.id |
+| dehallsg | De Hall Venue Team | English (SG) | ZERO pricing published — every cost question routes to the free 1-hr consultation. Facts from the site's PAGES only (fetch live), never its blog. De Hall Pte Ltd ROC 201931949G. Never fabricate any capacity or pricing figure |
+| ifgshipping | Iman Yusoff ("we, team Iman Yusoff") | English (SG) | Confirm active routes before stating. No made-up transit times, ports, Incoterms, or customs/duty figures without a primary source |
+| livinmalaysia | Iman Yusoff | English (MY) | **Immigration-sensitive (visa/MM2H/relocation): never fabricate visa rules, fees, timelines, legal or tax info; cite official MY government sources; no visa-approval guarantees.** Weave IFG Shipping + Iman Yusoff ecosystem. Fix hallucinated internal links before publishing |
+| matchdayaffairs | Matchday Affairs Team | English (SG) | **TA Licence TA03720.** EPL football tour packages. Confirm live fixtures/tickets/routes/prices before stating; "guaranteed entry" only as the brand states it. Schema: Event (mandatory). No date/price fabrication |
+| edureachsg | EduReach SG Team | English (SG) | Result/outcome claims (e.g. PSLE rates) must match the live site and be real — no fabricated results or guarantees; child/parent audience. Schema: EducationalOrganization. Confirm course/programme details before stating |
+
+**CMS taxonomy rule (all clients):** Shopify = tags only (5–8 per article);
+Wix/Squarespace = exactly 1 EXISTING category + 3–5 tags. Never invent a category.
+Note rajawangi.co.id is **Squarespace** (not Wix), verified 2026-07-08.
 
 ### Per-Client Links and Target Reader
 
@@ -619,8 +655,12 @@ Run every item. Fix any failure first.
 **Senior specialist test:**
 Would a senior specialist sign their name to this? If any sentence fits any industry, rewrite it. If any claim lacks a source, add one or remove the claim.
 
+**Pattern Lab gate (run last, after all of the above pass):**
+- [ ] `score_draft {domain, title, text}` returns ≥80. If below, fix the failing checklist items and re-score — don't publish on a lower score without flagging it to the user.
+- [ ] After publish: `log_experiment {url, changes}` called — this is what lets `experiment_results` validate the fix in 21+ days.
+
 ---
 
-*SingRank Article Writer v3.2*
+*SingRank Article Writer v3.3*
 *Supports: pullupstand · saffrons · ablink · RCS · yescpap · rajawangi · KG Teknik · dehallsg · ifgshipping · livinmalaysia · matchdayaffairs · edureachsg*
 *Verified reference: Aggarwal et al., GEO: Generative Engine Optimization, KDD 2024 (arXiv:2311.09735). All in-skill example numbers are illustrative — never copy them into client articles.*

@@ -12,7 +12,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [GEO, AEO, AI-search, llms-txt, Citability, AI-SoV, ChatGPT, Perplexity]
-    related_skills: [seo-agency, seo-audit, scrapling, duckduckgo-search, seo-kb]
+    related_skills: [seo-agency, seo-audit, seo-kb]
 ---
 
 # SingRank GEO / AEO Skill v1.0
@@ -104,7 +104,7 @@ Execute layers in order. Layer 1 failures block all other layers — fix first.
 
 If AI crawlers are blocked, zero GEO impact regardless of content quality.
 
-**Check robots.txt** (scrapling: `https://domain.com/robots.txt`):
+**Check robots.txt** (`WebFetch https://domain.com/robots.txt`):
 ```
 Required: these crawlers must be ALLOWED
 User-agent: GPTBot           → ChatGPT crawler
@@ -141,7 +141,7 @@ llms.txt is a plain-text file at `domain.com/llms.txt` that tells AI systems wha
 is about, what your key content is, and how to reference you.
 Spec: `github.com/AnswerDotAI/llms-txt`
 
-**Audit:** Does `domain.com/llms.txt` exist? (scrapling: raw fetch)
+**Audit:** Does `domain.com/llms.txt` exist? (`WebFetch` raw fetch)
 **Generate if missing:**
 
 ```markdown
@@ -204,7 +204,7 @@ Action priority: score from LOWEST to HIGHEST → fix cheapest signals first.
 ```
 
 **Citability audit per page — step by step:**
-1. Fetch raw HTML (scrapling) — confirm content is SSR (not JS-injected)
+1. Fetch raw HTML (`WebFetch`) — confirm content is SSR (not JS-injected); cross-check against the rendered DOM via `claude-in-chrome` if in doubt
 2. Extract first 150 words → does it answer the page's primary query directly? (Yes/No)
 3. For each H3 section: count words → target 134-167w per block
 4. For each H3: does the first 2 sentences answer the sub-question directly? (Yes/No)
@@ -280,7 +280,7 @@ Claude.ai  → High-quality long-form content + cited sources
 ```
 
 **Brand authority audit:**
-Scan these for client brand mentions (duckduckgo-search `site:reddit.com "[brand]"`):
+Scan these for client brand mentions (`WebSearch` `site:reddit.com "[brand]"`):
 - Reddit: r/singapore, r/asksingapore, r/indonesia, niche subreddits
 - YouTube: channel presence + video mentions
 - Wikipedia / Wikidata: entity page, sameAs links
@@ -293,13 +293,19 @@ Scan these for client brand mentions (duckduckgo-search `site:reddit.com "[brand
 - No Wikipedia: build through citation-worthy content and external press first
 - No Reddit presence: answer questions in relevant subreddits (not promotional)
 - GBP incomplete → fill all fields (photos, Q&A, weekly posts, respond to reviews)
-- Unlinked brand mentions → outreach to add link (use `domain-intel` + scrapling)
+- Unlinked brand mentions → outreach to add link (find them via `WebSearch` + `WebFetch`)
 
 ### LAYER 5 — AI Search Share of Voice (Monthly Tracking)
 
-**Setup:**
-Define 20–50 priority queries that matter for the client's business.
-For each, manually check (or via `page-agent` + Perplexity/ChatGPT interface):
+**Automated coverage (Gemini only, live):** `geo_citation_tracker {domain, days?, prompt?}` —
+per prompt: cited?+position, the actual AI query, cited_urls, share-of-voice vs competitors,
+trend. This is a real citation probe (Gemini + Google grounding, a proxy for AI Overview), not
+a manual check. Run this first for any platform-SoV question.
+
+**Manual coverage (ChatGPT/Perplexity — not automated; needs Perplexity `sonar` + OpenAI key
+which aren't connected):**
+Define 20–50 priority queries that matter for the client's business. For each, drive a browser
+via the `claude-in-chrome` tools to ChatGPT/Perplexity, submit the query, and read the response:
 - Does the client appear in the answer?
 - Are they cited as a source link?
 - Which competitors appear instead?
@@ -311,14 +317,15 @@ Compare vs prior month → track delta
 ```
 
 **Tools:**
-- `page-agent` skill → drive browser to ChatGPT/Perplexity, submit queries, read citations
+- `geo_citation_tracker` (SingRank MCP) → Gemini citation probe, automated, use first
+- `claude-in-chrome` browser tools → manual ChatGPT/Perplexity check, sample of 10-20 queries
 - SingRank `ai_visibility` tool → platform-aggregated signals
-- Open-source self-hosted: `github.com/danishashko/geo-aeo-tracker` (free)
-- Manual audit for sample of 10 queries: sufficient for monthly check
+- Be honest with the client about coverage: Gemini is probed live; ChatGPT/Perplexity citation
+  tracking is manual-sample only until those API keys are connected — don't imply parity.
 
 **Competitor citation gap:**
 For queries where competitors appear and client doesn't:
-1. What page of theirs is cited? → scrapling to analyze
+1. What page of theirs is cited? → `WebFetch` to analyze
 2. What makes it citation-worthy? (citability score, freshness, brand authority)
 3. Can we match or exceed those signals? → plan specific content updates
 
@@ -434,4 +441,4 @@ Actions taken: [llms.txt updated / fresh content / schema fix]
 Next month focus: [specific improvement target]
 ```
 
-Source: `ai_visibility` MCP tool + manual sample check via `page-agent`.
+Source: `geo_citation_tracker` (Gemini, automated) + `ai_visibility` MCP tool + manual sample check via `claude-in-chrome` for ChatGPT/Perplexity.

@@ -14,9 +14,14 @@ time, exhaustively, with evidence for every finding.
 1. Read the `singrank-playbook` skill (formulas, client constraints, output
    format) and the `seo-audit` skill (20-category audit procedure) before
    doing anything.
-2. Pull live data first: `list_clients` → `site_health` → `gsc_summary` →
-   `anomalies` → `fetch_log` (report staleness), then Ahrefs
-   `site-audit-issues` and Semrush `siteaudit_research` for cross-checks.
+2. Fast path first: `brain{doc:'audit'}` — the precomputed nightly audit +
+   DO-NEXT list, zero tool calls. Then live: `list_clients` → `site_health`
+   (v2, check `seoCoverage.pct` before claiming "no issues") →
+   `index_coverage` (not-indexed pages = priority #1) → `broken_links` (v2) →
+   `cwv_report` → `gsc_summary` → `anomalies` → `fetch_log` (report
+   staleness). Ahrefs `site-audit-issues` / Semrush `siteaudit_research` only
+   for domains outside SingRank's tracked footprint.
+   ⚠️ pullupstand canonicalMismatch ±25 is INTENTIONAL — not a finding.
 3. Run the 20-category audit from `seo-audit`: crawlability, indexation,
    CWV phase diagnosis, schema (incl. retired types), JS rendering, E-E-A-T,
    internal linking, cannibalization (`find_cannibalization`), and the rest.

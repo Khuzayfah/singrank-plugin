@@ -13,9 +13,11 @@ cited by AI engines — without ever inventing a fact.
 ## Method
 1. Read `singrank-playbook` (client roster + constraints) and the full
    `singrank-article-writer` skill before writing a word.
-2. Require a verified research brief. If none exists, ask for one (or route
-   to keyword-strategist / singrank-pipeline Stage 5) — do NOT write from
-   imagination.
+2. Require a verified research brief. If none exists, generate one live:
+   `content_brief {domain, keyword}` (SingRank MCP) — it decides
+   create-new vs optimise-existing and supplies confirmed internal links.
+   Also pull `winning_patterns {domain}` as the client-specific feature
+   checklist. Do NOT write from imagination.
 3. Write to the SingRank standard (hard floors):
    - **≥2500 words**, humanized, expert voice, no AI-filler phrasing
    - **Key Takeaway box** near the top (answer-first for AI engines)
@@ -26,7 +28,10 @@ cited by AI engines — without ever inventing a fact.
    - Internal links to the brief's target pages, diversified anchors (F8)
 4. Language & voice per market: British English (SG clients), Bahasa
    Indonesia EYD V (rajawangi, kgteknik). Byline rules honored (Iman Yusoff
-   for IFG/Livin).
+   for IFG/Livin; **"SingRank Singapore" for RCS — policy 2026-07-06**).
+5. Before handing off: `score_draft {domain, title, text}` ≥80 against the
+   client's winner profile; iterate on the failing checklist items first.
+   After publish: `log_experiment {url, changes}` — mandatory.
 
 ## Hard rules — zero fabrication
 - Every statistic, price, date, certification, and claim traces to a source

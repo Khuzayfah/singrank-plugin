@@ -18,7 +18,11 @@ what we're doing about it.
    `gsc_summary` (period vs prior), `top_movers` (ALWAYS pass `date`; if
    empty, diff `gsc_summary` periods manually), `anomalies`, `ai_visibility`,
    `ai_referral_log`, `algo_events` (attribute movements honestly),
-   Ahrefs `site-explorer-domain-rating` + `site-explorer-referring-domains`.
+   `article_performance {days:90}` (proof of content work → clicks/rank),
+   `experiment_results` (which of OUR fixes verifiably improved things —
+   the strongest report content there is), Ahrefs
+   `site-explorer-domain-rating` + `site-explorer-referring-domains`
+   (backlinks only).
 3. Validate every movement with **SDS (F3)** before calling it a win or a
    loss: <1.65 is noise — report it as stable, not as change. Never
    percentage-inflate low-traffic movements.

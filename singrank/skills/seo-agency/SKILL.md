@@ -12,9 +12,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [SEO, GEO, AEO, Audit, Recovery, Content, Reporting, Multi-client, Singapore, Indonesia]
-    related_skills: [seo-audit, seo-geo, seo-platforms, seo-kb, singrank-article-writer,
-                     scrapling, duckduckgo-search, domain-intel, page-agent,
-                     humanizer, powerpoint, nano-pdf, google-workspace, blogwatcher]
+    related_skills: [seo-audit, seo-geo, seo-platforms, seo-kb, singrank-article-writer]
 ---
 
 # SingRank Agency SEO Master v2.0
@@ -28,13 +26,20 @@ metrics. Pull data first, always.
 
 ## STEP 0 — ALWAYS PULL LIVE DATA FIRST
 
+**Zero-cost fast path — call `brain{}` before any live tool.** SingRank System serves its own
+always-current operating manual and precomputed per-client docs through this one tool:
+`brain{doc:'skill'}` (full 50-tool map + recipes), `brain{doc:'audit'}` (nightly technical
+audit + DO-NEXT), `brain{doc:'content'}` (content ideas, CTR leaks, cluster gaps, every 3h),
+`brain{doc:'ideas'}` / `brain{doc:'competitors'}` / `brain{doc:'sem'}` / `brain{doc:'retarget'}`.
+Read the relevant doc first — it costs nothing and is often already the answer.
+
 **Core pull — call every session (never skip):**
 ```
 list_clients              → exact domain key (required for ALL other calls)
-bootstrap_briefing        → AI-generated "state of the site" overview
+client_action_briefing    → one-call client state: traffic delta, keyword buckets, pillar ideas
 gsc_summary               → baseline: clicks, impressions, avg_position, CTR
 anomalies                 → algorithm-detected drops/spikes
-site_health               → pre-built technical health score + known issues
+site_health               → pre-built technical health score + known issues (or `brain{doc:'audit'}`)
 fetch_log                 → data freshness; if stale > 48h, note it explicitly
 ai_summary + ai_visibility→ AI presence across platforms
 ```
@@ -52,14 +57,20 @@ clarity_dimensions        → which page sections convert (critical for UX + SEO
 published_articles        → full content inventory
 recent_published_articles → last 30 days of new content
 get_internal_links        → internal link graph
-broken_links              → broken internal links
+broken_links              → broken internal links (v2: broken/redirects/externalBroken buckets)
+index_coverage            → REAL Google index status per page — fix before writing anything new
+cwv_report                → precomputed Core Web Vitals (field + lab, with trend)
+pillar_map                → topic-cluster / pillar-support link health for one domain
+competitor_gap            → first-party competitor content-gap (crawl competitor first)
+lead_content_ideas        → content ideas from REAL leads (stronger than high_intent_articles)
 article_performance       → article-level GSC data (impressions + clicks + position)
-high_intent_articles      → AI-flagged articles closest to conversion
+high_intent_articles      → AI-flagged articles closest to conversion (heuristic)
 smart_actions             → AI priority recommendations (use as cross-check against your analysis)
-client_action_briefing    → client-ready summary (use for reporting)
-keyword_gap               → keywords competitors rank for, client doesn't
-content_gap               → content topics competitor covers, client is missing
+bootstrap_briefing        → whole-account overview across all clients at once
+keyword_gap               → keywords competitors rank for, client doesn't (first-party)
+content_gap               → content topics competitor covers, client is missing (first-party)
 content_targets           → algorithm-suggested pages most worth improving
+keyword_research          → seed → Autocomplete + volume, for topics outside GSC footprint
 suggest_interlinks        → cosine-similarity based internal link suggestions
 find_cannibalization      → detected page pairs competing for same query
 ai_referral_log           → actual traffic arriving from AI platforms
@@ -67,32 +78,33 @@ geo_briefing              → GEO health summary per client
 geo_answerability_score   → which pages are most AI-answerable
 geo_citation_tracker      → where client is being cited by AI engines
 content_brief             → AI-generated GEO-optimized content brief per topic
-keyword_volume            → search volume for specific keyword list
+keyword_volume            → search volume for specific keyword list (pooled cross-client)
 get_article               → full content of a single article (for deep review)
 search_articles           → search client articles by keyword
 algo_events               → known Google algorithm update dates (correlate with drops)
 ```
 
-**Ahrefs MCP (backlinks + SERP intelligence):**
+**Pattern Lab (learn from this client's own winners — see singrank-playbook §2b):**
 ```
-site-explorer-domain-rating      → DR score
-site-explorer-organic-keywords   → ranking keyword list + positions
-site-explorer-referring-domains  → RD count + trend
-site-explorer-anchors            → anchor text distribution
-site-explorer-broken-backlinks   → link reclamation opportunities
-site-explorer-organic-competitors→ who Google sees as your real competitors
-serp-overview                    → full SERP for a query (who ranks, with what)
-keywords-explorer-overview       → keyword metrics (volume, KD, traffic potential)
-keywords-explorer-matching-terms → expanded keyword list
+winning_patterns          → learned winner vs loser feature profile, per client
+rank_reasons              → why ONE page ranks or doesn't, + rewrite checklist
+score_draft               → score a draft 0-100 before publish
+log_experiment            → mandatory log after any fix or publish
+experiment_results        → monthly validated verdict per intervention type
 ```
 
-**Semrush MCP (competitive benchmarks):**
+**Ahrefs MCP (backlinks only — SingRank has no first-party backlink data):**
 ```
-organic_research   → competitor organic keywords
-overview_research  → site traffic overview
-keyword_research   → keyword volume + difficulty
-siteaudit_research → technical audit data
+site-explorer-domain-rating      → DR score
+site-explorer-referring-domains  → RD count + trend
+site-explorer-anchors            → anchor text distribution (HHI formula)
+site-explorer-refdomains-history → link velocity z-score
 ```
+
+Ahrefs' organic-keyword/SERP tools and Semrush are optional fallbacks for a domain outside
+SingRank's tracked footprint (or a non-client prospect audit) — for tracked clients, the
+first-party fusion tools above (`keyword_gap`, `content_gap`, `competitor_gap`,
+`content_brief`) already cover competitive/keyword analysis without external API cost.
 
 ---
 
@@ -138,7 +150,7 @@ Confidence_multiplier:  Confirmed=1.00  Likely=0.80  Hypothesis=0.55
 This integrates evidence quality into the sort order — speculative issues don't
 crowd out confirmed critical ones.
 
-Worked example: broken canonical on 5 pages, confirmed by scrapling:
+Worked example: broken canonical on 5 pages, confirmed by live WebFetch check:
   Priority = (3 × 5 / 1) × 1.00 = 15.0
 
 Worked example: "maybe the meta is thin" on 20 pages, single signal:
@@ -158,7 +170,7 @@ STEP 1 — Base CTR by position (non-branded SG organic):
   pos6=0.05  pos7=0.04  pos8=0.04  pos9=0.03  pos10=0.03
   pos11-15=0.02  pos16-20=0.01
 
-STEP 2 — SERP feature modifier (check via duckduckgo-search "[keyword]"):
+STEP 2 — SERP feature modifier (check via WebSearch "[keyword]" — read the result snippets for AI Overview/Featured Snippet/Local pack presence):
   AI Overview dominant on SERP:  × 0.65  (AIO grabs ~35% of organic clicks)
   Featured Snippet box present:  × 0.75  (snippet grabs ~25%)
   Local pack / 3-box maps:       × 0.80  (local block displaces organic)
@@ -503,7 +515,7 @@ P_prior (probability of issue existing before looking at data):
 
 Likelihood multipliers (per evidence type, applied sequentially):
   MCP tool returns explicit issue data:  × 1.40
-  Scrapling/live verification confirms:  × 1.30
+  WebFetch/live verification confirms:   × 1.30
   Two corroborating indirect MCP signals: × 1.25
   One indirect MCP signal:               × 0.90
   Visual inspection only:                × 0.70
@@ -518,7 +530,7 @@ Posterior → Label:
 Worked example:
   Site not audited in 14 months (prior=0.70)
   site_health MCP shows "canonical mismatch" (×1.40)
-  scrapling confirms different canonical on live page (×1.30)
+  WebFetch confirms different canonical on live page (×1.30)
   P = 0.70 × 1.40 × 1.30 = 1.274 → cap at 0.98 → Confirmed
 
 Worked example 2:
@@ -536,7 +548,7 @@ Step 1: Data Pull (MCP)
 → clarity_summary, ai_visibility, ai_summary
 → published_articles, get_internal_links, broken_links, anomalies
 
-Step 2: Technical Crawl (scrapling or page-agent for JS sites)
+Step 2: Technical Crawl (`WebFetch` for raw HTML; `claude-in-chrome` browser tools to check rendered DOM on JS-heavy sites)
 Check each target URL for:
 - Title: 50–60 chars, primary keyword first, unique
 - Meta description: 150–160 chars, keyword in first 60 chars
@@ -610,7 +622,7 @@ Q2: Did the drop start within ±7 days of an algo_events entry?
 Q3: Did the drop start within ±3 days of a known client deploy/edit?
   YES → Technical regression:
         Check robots.txt, canonical, noindex, redirect chain, CWV change
-        Roll back if needed; compare cached page vs current via scrapling
+        Roll back if needed; compare a cached copy (Google cache / Wayback Machine) vs current via WebFetch
   NO  → continue to Q4
 
 Q4: Is the drop gradual (30+ days, slow position slide)?
@@ -622,7 +634,7 @@ Q4: Is the drop gradual (30+ days, slow position slide)?
 
 Q5 (any path): Is a new competitor URL in the top 10 that wasn't there before?
   YES → Competitor launched a competing page. 
-        scrapling their page → identify what they have that you don't → fix gap
+        WebFetch their page → identify what they have that you don't → fix gap
 ```
 
 Step 3: Calculate RPS — use this exact scoring rubric:
@@ -719,7 +731,7 @@ ROS = CTR_gap_adjusted × log₁₀(impressions + 1) × intent_fit
 CTR_gap_adjusted = base_CTR(pos) × SERP_modifier - actual_CTR
 SERP modifiers: AI Overview×0.65  FS×0.75  Local pack×0.80  Clean SERP×1.00
 
-Check SERP type with: duckduckgo-search "[keyword]" BEFORE computing CTR_gap
+Check SERP type with: WebSearch "[keyword]" BEFORE computing CTR_gap
 ```
 Sort by ROS DESC. Apply tiers:
 - **Tier 1 (ROS >0.08):** Act this week — title + meta + intent alignment
@@ -735,7 +747,7 @@ Step 3: Cluster by action type
 Step 4: Intent + SERP format classification — use this decision tree per keyword:
 
 ```
-duckduckgo-search "[keyword]" → read top 10 result types → apply:
+WebSearch "[keyword]" → read top 10 result types/snippets → apply:
 
 SERP shows…                     Content format to match
 ─────────────────────────────────────────────────────────────────
@@ -774,12 +786,16 @@ Step 1: Inventory existing content
 → get_internal_links — cluster structure
 
 Step 2: Research competitor coverage
+→ `competitor_gap` (SingRank MCP, first-party) — crawl the competitor first, then this returns
+  gaps (they cover, we don't, ranked by real impressions we already get on matching queries),
+  weakOverlap (both cover, we rank >10 — improve don't rewrite), theirRecent (publish velocity).
+  Omit `competitor` to list tracked competitors + AI-cited candidates worth crawling.
 → `content_gap` (SingRank MCP) — content topics competitor covers that client is missing
 → `keyword_gap` (SingRank MCP) — keywords competitor ranks for, client doesn't
-→ duckduckgo-search top 10 for 5–10 main category keywords
-→ scrapling competitor top pages → identify subtopics they cover
-→ `mcp__claude_ai_Ahrefs__site-explorer-organic-competitors` → confirmed organic competitors
-→ `mcp__claude_ai_Semrush__organic_research` → competitor keyword overlap
+→ WebSearch top 10 for 5–10 main category keywords (spot-check outside SingRank's crawl)
+→ WebFetch competitor top pages → identify subtopics they cover
+→ Ahrefs/Semrush organic-competitor tools only if the competitor is outside SingRank's tracked
+  footprint and `competitor_gap` can't be populated for them
 
 Step 3: Find gaps
 Priority gap types:
@@ -817,7 +833,7 @@ Step 1: Find candidate pairs (use SingRank first — don't guess)
 → published_articles — find articles with obviously overlapping titles/topics
 
 Step 2: Confirm with SERP overlap (FORMULA 10)
-→ duckduckgo-search "[primary query]" → get top 10 results
+→ WebSearch "[primary query]" → get top 10 results
 → Repeat for the secondary query Page B competes for
 → Calculate overlap:
 
@@ -877,7 +893,9 @@ Always resolve via: differentiate → canonical → consolidate (301 redirect) �
 Delete = last resort that requires explicit client approval + preserves URL via redirect.
 
 Step 5: Log resolution + track
-Note fix date in seo_kb. Revisit in 30 days: the stronger URL's position should stabilize.
+`log_experiment {url: <stronger URL>, changes: "cannibalization consolidated/differentiated"}`.
+Revisit in 30 days via `experiment_results` — the stronger URL's position should stabilize
+and the verdict field tells you whether the fix actually worked, not just that it was applied.
 
 ---
 
@@ -969,7 +987,9 @@ Step 3: Root cause
 Step 4: Action
 - RED alert: run PB-2 Recovery immediately on affected pages/keywords
 - YELLOW alert: investigate + monitor 7 more days before intervention
-- Log finding: `seo_kb.py ingest` with a dated note in `seo_kb/notes/<domain>-drift-<date>.md`
+- Log the finding: if a fix is applied, `log_experiment {url, changes}` (mandatory, feeds
+  `experiment_results` validation); for a note with no fix yet, `mcp__claude_ai_SingRank_Save__put_document`
+  to persist it for later retrieval (`search_documents` / `recall`)
 
 ---
 
@@ -1044,10 +1064,11 @@ SECTION 6 — Next Month Actions (max 3, sorted by Priority score):
 ```
 
 Step 4: Deliver
-→ Deck: `powerpoint` skill — use Section 1 TL;DR as slide 1
-→ PDF: `nano-pdf` skill
-→ Drive: `google-workspace` skill
-→ File name: `<client>_<market>_SEO_<YYYY-MM>.{pdf,pptx}`
+→ Deck/presentation: `mcp__claude_ai_Gamma__generate` — use Section 1 TL;DR as the opening card
+→ Quick shareable page: `Artifact` tool (HTML report) — good for an internal review pass before
+  a client-facing deck
+→ Drive/Docs delivery: `mcp__claude_ai_Google_Drive__create_file` (or Google Docs/Sheets MCP tools)
+→ File name: `<client>_<market>_SEO_<YYYY-MM>`
 
 ---
 
@@ -1164,31 +1185,39 @@ Also factor in: existing topical coverage (clusters with 30-50% coverage need fe
 
 | Need | Tool / Skill |
 |---|---|
+| Session bootstrap / always-current tool map | `brain{}` (SingRank MCP — call first, every session) |
 | Client GSC / Clarity / AI data | SingRank MCP (`list_clients` → then others) |
-| Pre-built site overview | `bootstrap_briefing` (SingRank MCP) |
-| Technical health score | `site_health` (SingRank MCP) |
+| One-call client state | `client_action_briefing` (SingRank MCP) |
+| Whole-account overview across clients | `bootstrap_briefing` (SingRank MCP) |
+| Technical health score | `site_health` (SingRank MCP), or `brain{doc:'audit'}` for zero-cost precomputed |
+| Real Google index status | `index_coverage` (SingRank MCP) |
+| Core Web Vitals | `cwv_report` (SingRank MCP) |
 | AI suggestions for what to fix | `smart_actions` (SingRank MCP) |
 | Cannibalization detection | `find_cannibalization` (SingRank MCP) |
 | Internal link suggestions | `suggest_interlinks` (SingRank MCP) |
-| Content gaps vs competitor | `content_gap` + `keyword_gap` (SingRank MCP) |
+| Cluster/pillar structure health | `pillar_map` (SingRank MCP) |
+| Content gaps vs competitor (first-party) | `content_gap` + `keyword_gap` + `competitor_gap` (SingRank MCP) |
+| Content ideas from real leads | `lead_content_ideas` (SingRank MCP) |
 | Content brief (GEO-optimized) | `content_brief` (SingRank MCP) |
+| Why one page ranks/doesn't | `rank_reasons` (SingRank MCP) |
+| Learned winner-vs-loser features | `winning_patterns` (SingRank MCP) |
+| Score a draft before publish | `score_draft` (SingRank MCP) |
+| Log a fix/publish for validation | `log_experiment` → `experiment_results` (SingRank MCP) |
+| Keyword research outside GSC footprint | `keyword_research` (SingRank MCP, first-party) |
 | GEO health + AI citation data | `geo_briefing` / `geo_answerability_score` / `geo_citation_tracker` |
-| Backlink profile / DR / RDs | `mcp__claude_ai_Ahrefs__site-explorer-*` tools |
-| SERP analysis for a keyword | `mcp__claude_ai_Ahrefs__serp-overview` |
-| Keyword research (volume, KD) | `mcp__claude_ai_Ahrefs__keywords-explorer-*` tools |
-| Competitor keyword gaps | `mcp__claude_ai_Semrush__organic_research` |
-| Technical site crawl (external) | `mcp__claude_ai_Ahrefs__site-audit-issues` + `mcp__claude_ai_Semrush__siteaudit_research` |
-| SERP check / "who ranks for X" | `duckduckgo-search` skill |
-| Scrape page / competitor content | `scrapling` skill |
-| JS-rendered site / login wall | `page-agent` skill |
-| Domain DNS / WHOIS / subdomains | `domain-intel` skill |
-| Watch competitor blog updates | `blogwatcher` skill |
-| De-AI / humanize draft | `humanizer` skill |
-| Report deck | `powerpoint` skill |
-| PDF deliverable | `nano-pdf` skill |
-| Google Sheets/Docs/Drive | `google-workspace` skill |
-| Local KB trend query | `seo_kb.py query / trends` (fallback if MCP unavailable) |
+| Backlink profile / DR / RDs / anchor HHI | `mcp__claude_ai_Ahrefs__site-explorer-*` tools (Ahrefs — backlinks only, SingRank has none) |
+| SERP check / "who ranks for X" | `WebSearch` |
+| Fetch a page's raw HTML / competitor content | `WebFetch` |
+| JS-rendered site / rendered DOM check | `claude-in-chrome` browser tools |
+| Persist a note/finding for later retrieval | `mcp__claude_ai_SingRank_Save__put_document` / `search_documents` / `recall` |
+| Report deck / presentation | `mcp__claude_ai_Gamma__generate` |
+| Quick shareable report page | `Artifact` tool |
+| Google Sheets/Docs/Drive delivery | `mcp__claude_ai_Google_Drive__*` tools |
+| Client trend query ("how is X doing") | `brain{doc:'content'}` / `client_action_briefing` — see `seo-kb` skill |
 | Full 20-category technical audit | `seo-audit` skill |
 | GEO/AEO layer / AI crawler / llms.txt | `seo-geo` skill |
 | Wix or Shopify platform-specific fixes | `seo-platforms` skill |
 | Write SEO article (≥2500w) | `singrank-article-writer` skill |
+
+Ahrefs' organic-keyword/SERP tools and all Semrush tools are optional fallbacks for domains
+outside SingRank's tracked footprint — the first-party fusion tools above are the default.

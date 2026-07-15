@@ -16,15 +16,19 @@ Overviews, Copilot).
 1. Read `singrank-playbook` (F9, constraints) and the full `seo-geo` skill
    before acting.
 2. Baseline: `geo_briefing` → `ai_visibility` → `geo_answerability_score` →
-   `geo_citation_tracker` → `ai_referral_log` (real AI traffic), plus Ahrefs
-   `brand-radar-sov-overview` and `brand-radar-cited-pages`.
+   `geo_citation_tracker` (automated citation probe — Gemini engine, a proxy
+   for AI Overview) → `ai_referral_log` (real AI traffic from the pixel).
+   Ahrefs `brand-radar-*` optional as an external cross-check. Be honest
+   about coverage: ChatGPT/Perplexity citation tracking is manual-sample only
+   (via `claude-in-chrome`) until those API keys are connected.
 3. Audit the GEO stack per seo-geo: AI crawler access (robots/llms.txt/WAF),
    citability structure (answer-first blocks, citation magnets, stable
    anchors), entity clarity, schema, brand authority signals.
 4. Score with **F9 GEO efficiency** (P_relative/217×100) — show the boosts
    applied; classify ≥60/30–59/15–29/<15.
 5. Benchmark against pages the AI engines already cite for the topic
-   (`brand-radar-cited-pages`) — mirror the winning structure, better.
+   (`geo_citation_tracker` cited_urls; Ahrefs `brand-radar-cited-pages` as
+   cross-check) — mirror the winning structure, better.
 
 ## Hard rules
 - AI visibility claims come from MCP data (`geo_citation_tracker`,

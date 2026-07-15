@@ -26,11 +26,28 @@ For anything that edits actual theme CODE — Liquid files, section schema,
 JSON templates, theme file pushes/publishing — use the deeper
 `shopify-theme-liquid` skill and the `shopify-theme-engineer` agent instead.
 
-**Golden rules (apply to both platforms):**
+**Golden rules (apply to all platforms):**
 - NEVER delete articles, pages, products, or collections
 - Fix via: rewrite → redirect → canonical → strengthen → interlink
 - Body payloads > 30KB → use snippet approach (send in sections or via reference)
 - Always verify the fix landed by reading back the saved content
+
+**Client → platform map (verified by live probe 2026-07-08 — Save doc id 79):**
+
+| Platform | Clients |
+|---|---|
+| Shopify | pullupstand.com, renovationcontractorsingapore.com, ablink.sg, saffrons.com.sg, yescpap.com, matchdayaffairs.com, www.edureachsg.com, kgteknik.co.id |
+| Wix | www.dehallsg.com, www.ifgshipping.com, www.livinmalaysia.com |
+| **Squarespace** | www.rajawangi.co.id |
+| Next.js (own code) | singrank.com, id.singrank.com, my.singrank.com — edit at D:\singrank-web, deploy via Cloudflare Pages (confirm before deploy) |
+
+**Squarespace (rajawangi.co.id) — no MCP write access:** there is no Squarespace
+MCP connected. Content/SEO edits go through the Squarespace editor manually, or
+via the `claude-in-chrome` browser tools driving the editor UI with the user's
+session. Sitewide code (GEO pixel, schema JSON-LD) → Settings → Advanced →
+Code Injection (Business plan+). Taxonomy: 1 EXISTING category + 3–5 tags,
+never a new category. Never present a Wix/Shopify API call as applicable to
+rajawangi.
 
 ---
 

@@ -25,7 +25,19 @@ delete.
 - `relatedPostIds` max 3. FAQ schema via seoData script tag; site CSS via
   custom-embeds HEAD.
 
-**Shopify** (ablink, RCS, saffrons, pullupstand):
+**Squarespace** (rajawangi.co.id — verified by live probe 2026-07-08, NOT Wix):
+- No Squarespace MCP connected — no API write path. Edits go through the
+  Squarespace editor manually or via `claude-in-chrome` browser tools driving
+  the editor with the user's session. Sitewide code (pixel, JSON-LD) →
+  Settings → Advanced → Code Injection.
+- Taxonomy: 1 EXISTING category + 3–5 tags; never create a category.
+
+**Next.js (own)** (singrank.com, id.singrank.com, my.singrank.com):
+- Code at D:\singrank-web, Cloudflare Pages deploy via wrangler — ALWAYS
+  confirm with the user before any production deploy.
+
+**Shopify** (ablink, RCS, saffrons, pullupstand, yescpap, matchdayaffairs,
+edureachsg, kgteknik — platform verified 2026-07-08):
 - Writes via `graphql_mutation`; reads via `graphql_query`.
 - Schema lives at THEME level — never inject JSON-LD into article body.
 - Body >30KB → snippet approach, never full-body API rewrite (RCS!).
@@ -41,6 +53,8 @@ delete.
 - Draft first; publish only with explicit approval or standing approval.
 - One client per task — no cross-client operations in a single run.
 - Log every mutation performed (tool, ID, field, before → after).
+- After any SEO-relevant change lands: `log_experiment {url, changes}`
+  (SingRank MCP) so `experiment_results` can verify the fix worked.
 
 ## Return
 Execution log: each change as before/after with the exact MCP call used,

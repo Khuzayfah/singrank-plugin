@@ -27,35 +27,60 @@ numbers — always start from live MCP data.**
 
 ## 1. MANDATORY DATA PULL (start of every session / client task)
 
-Three MCPs are connected: **SingRank System** (primary), **Ahrefs**
-(backlinks + SERP), **Semrush** (competitive).
+**Call `brain{}` FIRST, every session, before anything else.** The SingRank
+System MCP serves its own always-current operating manual through this tool
+(`brain{doc:'skill'}` = full 50-tool map + recipes; `brain{doc:'audit'}` /
+`brain{doc:'content'}` / `brain{doc:'ideas'}` / `brain{doc:'competitors'}` /
+`brain{doc:'sem'}` / `brain{doc:'retarget'}` = per-client answers **precomputed
+server-side, zero tool calls**, refreshed nightly to every 3h). Read the
+relevant precomputed doc before reaching for the live tool it summarizes — it
+is free and current. Live tools below are for detail, verification, or
+anything the precomputed docs don't cover.
+
+Three MCPs are connected: **SingRank System** (primary, first-party), **Ahrefs**
+(backlinks — SingRank has no first-party backlink data), **Semrush**
+(supplementary competitive benchmark — SingRank's own `competitor_gap`,
+`keyword_gap`, and `content_gap` already cover competitive content analysis
+first-party for tracked clients; reach for Semrush only for a domain outside
+that footprint, or to sanity-check a first-party read).
 
 Core pull, in order:
 
 | Tool | Purpose |
 |---|---|
-| `list_clients` | Domain key — ALWAYS first |
-| `bootstrap_briefing` | AI-generated site status overview |
-| `site_health` | Technical health score + known issues |
+| `brain{}` | Load the live operating manual + check for a precomputed answer — ALWAYS first |
+| `list_clients` | Exact domain key |
+| `client_action_briefing` | One-call client state: traffic delta, keyword buckets, pillar ideas |
+| `site_health` | Technical health score + known issues (or read `brain{doc:'audit'}`) |
 | `gsc_summary` | Baseline traffic |
 | `anomalies` | Automatic anomaly detection |
 | `ai_visibility` | AI-search visibility |
 | `fetch_log` | Data freshness — if stale, SAY SO, don't guess |
 
 Task-specific add-ons: `top_movers` (ALWAYS include `date` arg; often empty →
-fallback to `gsc_summary` diff), `smart_actions`, `client_action_briefing`,
+fallback to `gsc_summary` diff), `smart_actions`, `bootstrap_briefing`,
 `find_cannibalization`, `suggest_interlinks`, `content_gap`, `keyword_gap`,
-`content_targets`, `high_intent_articles`, `content_brief`,
-`clarity_dimensions`, `ai_referral_log`, `geo_briefing`,
-`geo_answerability_score`, `geo_citation_tracker`, `algo_events`.
+`content_targets`, `high_intent_articles`, `lead_content_ideas` (real leads,
+stronger than `high_intent_articles`'s heuristic), `content_brief`,
+`clarity_dimensions`, `clarity_leads`, `ai_referral_log`, `geo_briefing`,
+`geo_answerability_score`, `geo_citation_tracker`, `algo_events`,
+`pillar_map` (cluster/pillar health), `competitor_gap` (first-party
+competitor content-gap — crawl the competitor first), `index_coverage`
+(real Google index status — fix before writing anything new),
+`cwv_report` (precomputed Core Web Vitals, no external API needed),
+`article_performance` (proof of content ROI), `keyword_research` (seed →
+Autocomplete + volume, for topics outside current GSC footprint),
+`keyword_volume` (pooled cross-client volume proxy).
 
-Ahrefs: `site-explorer-domain-rating`, `site-explorer-organic-keywords`,
-`site-explorer-referring-domains`, `site-explorer-anchors`, `serp-overview`,
-`keywords-explorer-overview`, `brand-radar-sov-overview`,
-`brand-radar-cited-pages`, `site-audit-issues`.
+**Pattern Lab — learn from what already ranks (see §2b):** `winning_patterns`,
+`rank_reasons`, `score_draft`, `log_experiment`, `experiment_results`.
 
-Semrush: `organic_research`, `overview_research`, `keyword_research`,
-`siteaudit_research`, `backlink_research`.
+Ahrefs (backlinks only — HHI/anchor formula, DR, link velocity):
+`site-explorer-domain-rating`, `site-explorer-anchors`,
+`site-explorer-referring-domains`, `site-explorer-refdomains-history`.
+Ahrefs organic-keyword/SERP tools and all Semrush tools are optional
+fallbacks, not part of the mandatory pull — prefer the first-party
+fusion tools above for any tracked client.
 
 Traffic value is already in SGD in SingRank MCP (`traffic_value_sgd`).
 
@@ -139,6 +164,43 @@ P(issue) = P_prior × ∏(multipliers)   [cap 0.98]
 
 ---
 
+## 2b. PATTERN LAB — the CRAG loop (learn → write → score → validate)
+
+SingRank precomputes what actually ranks from the client's own data (GSC ×
+RAG, nightly). Use this loop instead of guessing what "good content" looks
+like — it is grounded in this specific client's winners, not generic SEO
+advice.
+
+1. **Before writing:** `winning_patterns {domain}` — median features of 🏆
+   winners (pos ≤8) vs 🪫 losers (pos ≥15): word count, incoming links, FAQ
+   presence, question-headings, title patterns, numbers density. Falls back
+   to the client's language segment, then cross-client, if too few
+   winners/losers exist yet. Use the rules as a checklist; a negative
+   correlation means "don't force this feature," never "delete existing
+   content with it."
+2. **Rewriting an existing page:** `rank_reasons {url}` — classifies the page
+   (🏆/🪫/mid/👻 invisible), lists `whyItRanks` (traits it already has) and
+   `gapsToFix` (the rewrite checklist vs the winner median). Fix only the
+   gaps; don't touch what's already working.
+3. **Before publishing any draft:** `score_draft {domain, title, text}` —
+   0–100 score + pass/fail checklist against the winner profile. Iterate
+   until ≥80. (It cannot score incoming-link features — plan those via
+   `content_brief`'s `internalLinksToInclude` / `linksToBuildToThisPage`.)
+4. **After publishing or applying any fix:** `log_experiment {url, changes}`
+   is mandatory — snapshot the 28-day GSC baseline with a consistent,
+   comma-separated vocabulary for `changes` (e.g. "added faq, +3 interlinks
+   in, title year"). Skipping this breaks the validation loop below.
+5. **Monthly:** `experiment_results {domain?}` — verdict per intervention
+   (improved / flat / worse, evaluable from day 21+) plus an aggregate per
+   fix type. This is how a "rule" graduates from correlation to **validated**
+   causal playbook entry — or gets discarded if it nets out flat/worse.
+
+This loop is the single biggest lever this system has that generic SEO
+practice doesn't: every recommendation can be checked against this specific
+client's own historical cause-and-effect, not industry folklore.
+
+---
+
 ## 3. OPERATING PRINCIPLES (non-negotiable)
 
 1. **Evidence first.** Every claim needs MCP data or a live-verified source.
@@ -173,21 +235,38 @@ PRIORITY:   [number from F1]
 
 ## 5. ACTIVE CLIENT ROSTER + CRITICAL CONSTRAINTS
 
+Platforms below were verified by live probe 2026-07-08 (Save doc id 79 slug
+registry). Full compliance registry: Save doc id 48 (`singrank-client-registry-v1.1`).
+
 | Domain | Platform | Critical notes |
 |---|---|---|
-| ablink.sg | Shopify | EV fleet, British EN; edit DRAFT theme 183046078779 ONLY; read key for `graphql_query`, admin key for `graphql_mutation` — confirm active key before writes |
-| renovationcontractorsingapore.com | Shopify | RCS; HDB Licence HB-11-5877Z; full admin via MCP; body >30KB → use snippet, not API rewrite |
-| saffrons.com.sg | Shopify | Halal catering; 281 News articles; MUIS cert mandatory in schema; meta lives in `global.title_tag` metafield |
-| pullupstand.com | Shopify | Display stands; fix cannibalization via article meta ONLY — NEVER touch collections/products/body |
-| www.dehallsg.com | Wix | Venue; ZERO pricing published; no delete; canonical-consolidate for cannibalization |
-| www.ifgshipping.com | Wix | Freight forwarding; never fabricate transit times; Iman Yusoff byline |
-| www.livinmalaysia.com | Wix | 44 stale articles; Iman Yusoff + IFG Shipping ecosystem weave; ongoing refresh |
-| singrank.com | — | Agency site + dashboard (app.singrank.com) |
-| www.rajawangi.co.id | — | Bahasa Indonesia EYD V; ID market |
-| kgteknik.co.id | — | Bahasa Indonesia; Batam + Pekanbaru market |
-| yescpap.com | — | **YMYL MEDICAL** — ZERO health claims without a source; no diagnosis language; HCP review required for new claims; schema `MedicalBusiness` (LocalBusiness subtype) |
-| matchdayaffairs.com | — | Events; schema `Event` mandatory |
-| www.edureachsg.com | — | Education SG; schema `EducationalOrganization` |
+| ablink.sg | Shopify | EV fleet, British EN; edit DRAFT theme 183046078779 ONLY; read key for `graphql_query`, admin key for `graphql_mutation` — confirm active key before writes; **NEVER state a vehicle price in content** — link "view latest price" to the live page; body price ≠ COE; no fabricated CVES; ASAS-compliant claims; CPFTA disclaimer |
+| renovationcontractorsingapore.com | Shopify | RCS; HDB Licence HB-11-5877Z · BCA · PMI · BizSafe L3; NEVER CaseTrust; **author policy 2026-07-06: byline "SingRank Singapore"** (team voice, not a named individual); full admin via MCP; body >30KB → use snippet, not API rewrite |
+| saffrons.com.sg | Shopify | Halal catering; 281 News articles; MUIS cert stated exactly in schema; meta lives in `global.title_tag` metafield; voice = expert food blogger, hard-sell minimal |
+| pullupstand.com | Shopify | Display stands; fix cannibalization via article meta ONLY — NEVER touch collections/products/body; canonicalMismatch ±25 in site_health is INTENTIONAL (Jun-2026 fix); content play = 80%+ real event facts (dates/venue linked to official pages) |
+| www.dehallsg.com | Wix | Venue; De Hall Pte Ltd ROC 201931949G, Tai Seng Centre #02-08 SG369522, tel 9855 3027; ZERO pricing published — every cost question → free 1-hr consultation; facts from site PAGES only, never its blog; no delete; canonical-consolidate for cannibalization |
+| www.ifgshipping.com | Wix | Freight forwarding SG/ID; never fabricate transit times/ports/Incoterms/duty figures; Iman Yusoff byline ("we, team Iman Yusoff") |
+| www.livinmalaysia.com | Wix | **Expat relocation consulting (visa/MM2H, housing, schools) — immigration-sensitive**: never fabricate visa/fees/timelines/legal/tax; cite official MY gov; no visa-approval guarantees; en-MY; 44 stale articles refresh ongoing; Iman Yusoff + IFG ecosystem weave |
+| singrank.com | Next.js (own) | Agency site + dashboard (app.singrank.com); code at D:\singrank-web, Cloudflare Pages deploy — confirm before deploy |
+| www.rajawangi.co.id | **Squarespace** | Laundry products (parfum/pewangi/sabun/chemical) + agen network; Bahasa Indonesia EYD V; NO pricing in articles → WhatsApp; PKRT Kemenkes RI, Halal, IBPLA 2022; never guarantee income; **LANE LOCK: owns parfum/pewangi/sabun/chemical/agen keywords** |
+| kgteknik.co.id | Shopify | Paket usaha + mesin laundry; Bahasa Indonesia; branches Batam + Pekanbaru ONLY (ships nationwide, don't imply other branches); no fabricated machine/paket prices → WhatsApp; never guarantee income; **LANE LOCK: owns paket/perlengkapan/mesin/franchise/peluang-usaha-laundry keywords** |
+| yescpap.com | Shopify | **YMYL MEDICAL** — ZERO health claims without peer-reviewed/gov source; no diagnosis language; HCP review required; named medical author still [VERIFY] with client; schema `MedicalBusiness` (LocalBusiness subtype) |
+| matchdayaffairs.com | Shopify | EPL football tour packages; **TA Licence TA03720**; confirm live fixtures/tickets/routes/prices before stating; "guaranteed entry" only as brand states it; schema `Event` mandatory; no fabricated dates/prices |
+| www.edureachsg.com | Shopify | Tutoring (PSLE + secondary); result/outcome claims must match the live site and be real — no fabricated results/guarantees; child/parent audience; schema `EducationalOrganization` |
+| id.singrank.com | Next.js (own) | SingRank ID-market sub-site; critical constraints not yet documented — confirm scope before first task |
+| my.singrank.com | Next.js (own) | SingRank MY-market sub-site; critical constraints not yet documented — confirm scope before first task |
+| kgcorp.co.id | — | Bahasa Indonesia; corporate site, distinct from kgteknik.co.id — confirm relationship/scope before first task |
+
+**Cross-client lane locks (anti-cannibalization, hard rule):** KG Teknik and
+Rajawangi split the laundry vertical — KG Teknik owns business-setup intent
+(paket/mesin/franchise/peluang usaha), Rajawangi owns supplies intent
+(parfum/pewangi/sabun/chemical/agen). Two-way interlink between them; NEVER
+target the same primary keyword from both.
+
+**CMS taxonomy rule:** Shopify = tags only (5–8 per article); Wix/Squarespace =
+exactly 1 EXISTING category + 3–5 tags. Never invent a new category.
+
+*Roster is read live from `list_clients` — confirm it still matches this table before relying on the notes column; new clients appear here without constraints until documented.*
 
 ---
 
@@ -202,11 +281,15 @@ PRIORITY:   [number from F1]
 | "cannibalization" / "keyword konflik" | `find_cannibalization` → **seo-agency** PB-5 |
 | "orphan" / "internal link audit" | `suggest_interlinks` → **seo-agency** PB-6 |
 | "local SEO" / "GBP" / "local pack" | **seo-agency** → PB-9 |
-| "topical authority" / "cluster" / "pillar" | **seo-agency** → PB-10 |
+| "topical authority" / "cluster" / "pillar" | `pillar_map` → **seo-agency** PB-10 |
+| "kenapa artikel ini nggak ranking" / single-page diagnosis | `rank_reasons {url}` |
+| "keyword/artikel mana yang datengin leads beneran" | `lead_content_ideas` (real leads) |
+| "kompetitor cover topik apa yang kita belum" | `competitor_gap {domain, competitor}` (crawl first) |
+| "draft ini udah layak publish?" | `score_draft {domain, title, text}` |
 | "GEO" / "AI search" / "llms.txt" | `geo_briefing` → **seo-geo** |
 | "fix Wix" / "fix Shopify" / schema / meta (content/metafield level) | **seo-platforms** |
 | "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |
 | "tulis artikel" / "write article" | **singrank-article-writer** |
 | "laporan bulanan" / "monthly report" | `client_action_briefing` → **seo-agency** PB-8 |
-| "tren klien" / "how is X doing" | `bootstrap_briefing` → **seo-kb** |
+| "tren klien" / "how is X doing" | `brain{doc:'content'}` / `client_action_briefing` → **seo-kb** |
 | "dari idea sampai publish" / full campaign | **singrank-pipeline** |

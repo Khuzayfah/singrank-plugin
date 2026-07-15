@@ -26,11 +26,20 @@ client constraints, and output format.
 
 ## STAGE 0 — Baseline (always)
 
-Pull the core data set: `list_clients` → `bootstrap_briefing` → `site_health`
-→ `gsc_summary` → `anomalies` → `ai_visibility` → `fetch_log`.
+`brain{}` first (live operating manual + precomputed docs — `brain{doc:'content'}`
+often already contains the ranked idea list this pipeline is about to derive).
+Then: `list_clients` → `client_action_briefing` → `site_health` → `gsc_summary`
+→ `anomalies` → `ai_visibility` → `fetch_log`.
+
+Open a state record in the Save store (`mcp__claude_ai_SingRank_Save__put_document`,
+tag `pipeline-state`) — one doc per article, updated in place at every stage
+transition: client, topic, stage, QC score/iteration, artifact doc ids, next
+review date. A sweep over `tag:pipeline-state` is the kanban across all clients.
 
 **GATE 0:** Data fresh (per `fetch_log`)? Client constraints loaded from the
-playbook roster? If data is stale → tell the user, do not proceed on guesses.
+playbook roster (including platform — rajawangi is Squarespace; lane locks for
+KG Teknik ↔ Rajawangi)? If data is stale → tell the user, do not proceed on
+guesses.
 
 ## STAGE 1 — Structural clearance
 
@@ -46,17 +55,31 @@ content under F1 anyway).
 
 ## STAGE 2 — Opportunity discovery (the "idea")
 
-Run in parallel:
+Zero-cost first: `brain{doc:'content'}` (ranked ideas per client, 3-hourly) and
+`brain{doc:'ideas'}` (new keywords OUTSIDE our footprint, with volume + angle).
+Then live, in parallel:
 - `keyword_gap` — keywords competitors rank for, we don't
 - `content_gap` — topics competitors cover, we don't
+- `competitor_gap {domain, competitor}` — first-party competitor sitemap vs our
+  coverage, ranked by real impressions (crawl the competitor first)
 - `content_targets` — existing pages most worth improving
-- `high_intent_articles` — pages closest to converting
+- `lead_content_ideas` — ideas backed by REAL leads (where pixel installed);
+  `high_intent_articles` as the heuristic fallback everywhere else
 - GSC positions 4–20 → score with **ROS (F2)**
-- Ahrefs `keywords-explorer-overview` → volume + difficulty for candidates
-- Semrush `organic_research` on top 2–3 competitors → cross-check
+- `keyword_research {seed, market}` — first-party volume for candidates outside
+  the GSC footprint (Autocomplete + kwvol + Trends-scaled)
+- Ahrefs/Semrush only if a candidate can't be resolved first-party
+
+**Anti-cannibalization test (every idea, 3 parts):** (a) distinct primary intent
+vs every existing article; (b) materially different SERP top-10 (search the
+query and check); (c) distinct funnel stage OR distinct area/product entity.
+Any part fails → propose as a REFRESH of the existing article, not a new one.
+Cross-client: check the lane locks (KG Teknik ↔ Rajawangi) before claiming a
+keyword.
 
 **GATE 2:** Every candidate has: search volume (verified, not guessed),
-ROS or gap evidence, and intent_fit ≥0.7 for the client's money pages.
+ROS or gap evidence, intent_fit ≥0.7 for the client's money pages, and a
+passed 3-part cannibalization test.
 
 ## STAGE 3 — Prioritize
 
@@ -73,15 +96,18 @@ keyword + intent per URL — never two URLs chasing one keyword.
 ## STAGE 4 — SERP + AI-SERP recon
 
 For each confirmed target:
-- Ahrefs `serp-overview` → who ranks, DR range, content type that wins,
-  SERP features (apply the F2 SERP modifier honestly).
+- `WebSearch "[target query]"` → who ranks, content type that wins, SERP
+  features (apply the F2 SERP modifier honestly); `WebFetch` the top results
+  to gauge depth. Ahrefs `serp-overview` optional for DR context.
+- `winning_patterns {domain}` → what THIS client's ranking pages look like —
+  the feature checklist the draft must hit.
 - `geo_briefing` + `geo_answerability_score` → what the AI engines need.
-- Ahrefs `brand-radar-cited-pages` → which pages AI engines already cite for
-  this topic — that structure is the citability benchmark.
+- `geo_citation_tracker {domain}` → which pages AI already cites for related
+  prompts — that structure is the citability benchmark (first-party, Gemini).
 
 **GATE 4:** We can realistically beat the weakest top-5 result (content
-angle, depth, or freshness edge identified in writing). If DR gap is
-hopeless, re-route to a longer-tail variant instead of burning effort.
+angle, depth, or freshness edge identified in writing). If the authority gap
+is hopeless, re-route to a longer-tail variant instead of burning effort.
 
 ## STAGE 5 — Brief
 
@@ -106,9 +132,12 @@ Hand the brief to **singrank-article-writer**. Standards (hard floor):
 - Language per market: British EN (SG) / Bahasa Indonesia EYD V (ID)
 - Byline per client rules (e.g., Iman Yusoff for IFG/Livin)
 
-**GATE 6:** Word count ≥2500; every claim traceable to brief sources;
-keyword floors met; no health/pricing/transit-time fabrications per client
-constraints.
+**GATE 6 (auto-iterate ≤3×):** `score_draft {domain, title, text}` ≥80 against
+the client's own winner profile, AND: word count ≥2500; every claim traceable
+to brief sources; keyword floors met; no health/pricing/transit-time
+fabrications per client constraints. On FAIL: fix the exact failing checklist
+items, re-score. After the 3rd fail, STOP and escalate to the user with the
+blocking issues — never publish a failing draft, never loop forever.
 
 ## STAGE 7 — Publish (platform-correct, draft-first)
 
@@ -139,30 +168,43 @@ anchors diversified.
 
 ## STAGE 9 — Track + learn
 
-- Log the play: target keyword, publish date, baseline position/impressions.
+- **`log_experiment {url, changes}` — MANDATORY at publish.** Snapshots the
+  28-day GSC baseline; use consistent comma-separated vocabulary for `changes`
+  (e.g. "new article, +4 interlinks in, faq added"). Skipping this breaks the
+  validation loop.
+- Update the Save `pipeline-state` doc: status `published` / `measuring`,
+  next_review T+14.
 - Check `algo_events` before attributing any movement to the content.
 - Day 14 & 28: `gsc_page_trend` / `gsc_query_trend` → score movement with
   **SDS (F3)** — act only ≥2.0; ignore noise <1.65.
+- Day 21+: `experiment_results {domain}` → per-intervention verdict
+  (improved/flat/worse). Improved fixes become validated playbook rules;
+  worse/flat get dropped — causation, not correlation.
 - If decayed later: **F5** decides refresh vs rewrite; if dropped: **F4 RPS**
   decides fix-in-place vs deep rewrite vs consolidate.
 - Feed the outcome back: what angle won/lost goes into the next Stage 2.
 
-**GATE 9 (loop):** Every published piece has a scheduled 14/28-day check.
-The pipeline is a loop, not a line.
+**GATE 9 (loop):** Every published piece has a `log_experiment` entry, a
+Save state doc, and a scheduled 14/28-day check. The pipeline is a loop, not
+a line.
 
 ---
 
 ## Compressed cheat-sheet
 
 ```
-0 Baseline    → fresh data or stop
+0 Baseline    → brain{} + fresh data or stop; open Save state doc
 1 Structure   → no cannibal/crawl blockers on topic
-2 Discover    → keyword_gap + content_gap + ROS(F2)
+2 Discover    → brain{doc:'content'/'ideas'} + keyword_gap + content_gap +
+                competitor_gap + lead_content_ideas + ROS(F2); 3-part
+                cannibalization test + lane locks
 3 Prioritize  → F1 sort; refresh-vs-new via F5
-4 Recon       → serp-overview + geo benchmark; beatable or re-route
+4 Recon       → WebSearch SERP + winning_patterns + geo benchmark; beatable or re-route
 5 Brief       → content_brief + zero unverified stats
-6 Write       → article-writer standard (≥2500w, takeaway, magnets, FAQ)
+6 Write       → article-writer standard (≥2500w, takeaway, magnets, FAQ);
+                score_draft ≥80, auto-iterate ≤3× then escalate
 7 Publish     → draft-first, platform-correct, meta optimized
 8 Interlink   → ≥3 inbound links + GEO layer + anchor check(F8)
-9 Track       → SDS(F3) @ d14/d28; decay F5; recovery F4; learn → loop
+9 Track       → log_experiment MANDATORY; SDS(F3) @ d14/d28;
+                experiment_results @ d21+; decay F5; recovery F4; learn → loop
 ```
