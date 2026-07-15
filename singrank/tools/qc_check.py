@@ -190,6 +190,13 @@ def main():
     if wc < args.min_words:
         P0.append(f"WORD COUNT {wc} < floor {args.min_words}")
 
+    # unresolved verification markers — NEVER allowed in a publishable article
+    markers = re.findall(r"\[(?:verify before publishing|VERIFY[^\]]*|verify)\]",
+                         soup.get_text(" "), re.I)
+    if markers:
+        P0.append(f"UNRESOLVED [verify] MARKERS: {len(markers)} remaining "
+                  f"(e.g. {markers[0]}) — verify live or cut the claim before publish")
+
     lp0, lp1, link_rows = check_links(soup, args.base_url, args.skip_links)
     gp0, gp1 = check_geo(soup)
     sp0, sp1, schema_types = check_schema(soup)

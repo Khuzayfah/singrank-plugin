@@ -225,14 +225,84 @@ from this article's specific tension.
 
 | Client | Mode & voice | Hard-sell | CTA route |
 |---|---|---|---|
-| RCS | Team of real renovators; ~80% info (HDB/BCA-sourced) / ~20% package hard-sell with real verified prices | Mode A (commercial): full sell AFTER earned help; Mode B (info): no sell, interlink only | Consultation → RCS WhatsApp/contact (ai-deal.ai [VERIFY live first]); packages → live-verified product URL |
+| RCS | Team of real renovators; ~80% info (HDB/BCA-sourced) / ~20% package hard-sell with real verified prices | Mode A (commercial): full sell AFTER earned help; Mode B (info): no sell, interlink only | Digital/online consultation → **Ai-deal.ai** (operator-confirmed 2026-07-15; still fetch it live before linking — if unreachable, fallback RCS WhatsApp/contact); packages → live-verified product URL |
 | Saffrons | Expert food blogger who has EATEN the dish — sensory, opinionated (`[Opinion]` tags) | Soft: one genuine brand recommendation + page links | Catering/wedding enquiry or dine-in |
-| Pullupstand | Event insider; 80%+ = the EVENT itself (dates/venue/registration, official links mandatory) | ≤20% soft tie-in: which product makes THAT booth succeed | Matching product/collection, framed as exhibitor prep |
-| Ablink | Elite salesman who educates: specs, fit-logic, COE mechanics (LTA only) | Highest of all — every article sells via fit-logic, never hype; NEVER a price in content | Live-verified /pages/ routes (new, used, COE, lease, insurance, sell) |
+| Pullupstand | Event insider; 80% = the EVENT itself (dates/venue/registration, official links mandatory) | 20% product tie-in matched to the article's topic | Matching product/collection, framed as exhibitor/buyer prep |
+| Ablink | Elite salesman who educates: specs, fit-logic, COE mechanics (LTA only) | Highest of all — every article sells via fit-logic, never hype; NEVER a price in content | Live-verified /pages/ routes — see the Ablink playbook below |
 | IFG | "We, team Iman Yusoff" — educator-analyst; deepest answer on the internet for ONE problem | Low; authority play | Konsultasi shipping dengan Iman Yusoff |
 | Rajawangi | Supplier authority untuk calon agen; logika untung jadi agen dengan angka riil | Medium; value framing, no prices | Daftar agen / WhatsApp |
 | KG Teknik | Peace-of-mind turnkey guide untuk pemodal bingung; awareness → trust → konsultasi | Medium; The Winning Formula, proyeksi hanya dengan asumsi eksplisit | Konsultasi gratis |
 | De Hall | Venue-fit guide untuk couples + corporate | Soft; zero pricing ever | Book a free consultation |
+
+### Per-client CONTENT PLAYBOOKS (operator-confirmed 2026-07-15 — the standing strategy;
+### don't re-ask, apply)
+
+**ALL CLIENTS — high-intent only.** Every article targets readers close to a decision.
+Pure top-of-funnel trivia is out; "semi-commercial" is the floor: rich information that
+high-intent searchers want, closing into the client's product/service.
+
+**PUBLISH GATE (all clients): ZERO `[verify before publishing]` / `[VERIFY]` markers may
+remain in a published article.** Resolve every marker (verify live or cut the claim)
+before publish — `tools/qc_check.py` lints leftover markers as P0.
+
+**Pullupstand — the event/exhibition/printing information machine (80/20):**
+- Arena: SG events, exhibitions, trade shows, booth prep, printing shops, printing needs.
+- 80% = the INFORMATION people actually search: explain the event/exhibition in full
+  detail — what it is, exact dates, venue, how to get there, how to register, cost of
+  entry, what's inside, exhibitor logistics — every fact from the OFFICIAL event source
+  (link it; wrong date = P0). For printing topics: the real comparison/answer first
+  (where, how fast, formats, quality).
+- 20% = the product close matched to THAT topic: exhibition article → "how to make your
+  booth succeed at [event]" with the specific Pullupstand products; printing article →
+  which Pullupstand products/services fit + route online-printing needs to
+  pullupstand.com.
+- TWO reader intents — pick per article and write to it: (a) SG locals; (b) GLOBAL
+  exhibitors coming to Singapore for a show (they don't know SG — logistics, venue
+  transport, local printing before the show). Exhibition themes usually = (b).
+
+**Saffrons — the halal foodie destination (traffic → soft funnel):**
+- Arena: general halal food content for foodies — Singaporeans love food. Latest food
+  finds, newest halal spots/openings, best-of lists, dish deep-dives, bento guides,
+  wedding planning (majlis/how-to), event catering guides.
+- Flow: find the gap FIRST in SingRank System (brain content/ideas, keyword_gap,
+  content_targets for saffrons) → deep research what people actually search and what's
+  missing → write the definitive version with an improvement competitors lack.
+- High-intent lens: foodie ready to eat/order/book; wedding & corporate planners ready
+  to hire catering. Saffrons enters as a genuine recommendation with dish-level
+  specifics, never a brochure.
+
+**RCS — problem → solution → package (buyers only):**
+- Target reader: someone with a renovation PROBLEM or someone READY to renovate
+  (toilet, kitchen, whole-flat, BTO key collection). Not dreamers — buyers.
+- Every article: the problem explained better than anyone (HDB/BCA-sourced) → the
+  solution → the matching RCS package with live-verified price → CTA.
+- Tips/tricks articles carry the CTA to **Ai-deal.ai** (professional digital/online
+  consultation) alongside the package links; renovation-service articles route to the
+  relevant package/collection pages. Pull the full product/package list live from
+  SingRank System (search_articles content_type:product / smart_actions
+  transactionalToProduct) — all RCS products are fair game where relevant and valid.
+
+**Ablink — inventory-first commercial matching (routes verified live 2026-07-15):**
+- STEP 1 — inventory first: the vehicle listing on /pages/new-commercial-vehicles and
+  /pages/car-marketplace is JS-RENDERED (T8 app; `?v=` params are numeric IDs, e.g.
+  `?v=1702707948`, sometimes slugs like `?v=hino-dutro`). Raw fetch shows NO vehicle
+  names → scrape the RENDERED page (claude-in-chrome) or T8 backend at write time to
+  see what's actually in stock. NEVER guess a model or a `?v=` link — copy them from
+  the live rendered page.
+- STEP 2 — demand: SingRank System (gsc_top_queries by impressions, keyword_gap,
+  brain ideas) → which in-stock models/segments have high-impression potential.
+- STEP 3 — the article: data-driven commercial piece matching vehicle to buyer's
+  business: specs (official SG sources: LTA/OneMotoring only), use-case fit ("van for
+  a kitchen/catering business", "parcel delivery fleet", cold chain...), cash vs loan,
+  COE mechanics. Sells through fit-logic. NEVER state a price — "view latest price" →
+  live page.
+- CTA routing (all verified 200 on 2026-07-15): new → /pages/new-commercial-vehicles
+  (+ exact `?v=` variant copied live) · used/second-hand → /pages/car-marketplace ·
+  lease → /pages/lease-commercial-vehicle · sell their current vehicle →
+  /pages/sell-vehicle (free quotation) · COE renewal →
+  /pages/coe-renewal-loan-singapore-fast-approval-for-cars-commercial-vehicles ·
+  insurance → /pages/motor-insurance (LONPAC & Tokio Marine authorised agent). Match
+  the CTA to the reader's situation: buying new vs used vs selling vs renewing.
 
 **Author entities (author-registry v1.1 — bylines are FACTS, never invented):**
 - yescpap: **Jo Ng, RPSGT — Certified Sleep Technologist** (named YMYL author REQUIRED;

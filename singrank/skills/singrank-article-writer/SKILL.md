@@ -437,7 +437,7 @@ best verified fact mid-piece, emotional close on the CTA section.
 
 | Client | CTA example |
 |---|---|
-| RCS | "Request a free HDB renovation quote from our licensed team" |
+| RCS | Package articles: "Get a fixed-price quote — free, from our HDB-licensed team (HB-11-5877Z)"; tips/tricks articles: digital consultation via **Ai-deal.ai** (fetch live before linking; fallback WhatsApp/contact) |
 | pullupstand | "Explore our Singapore exhibition display collection" |
 | saffrons | "Get a custom halal catering quote for your event" |
 | ablink | "Speak to our EV fleet specialists today" |
@@ -697,7 +697,10 @@ Run every item. Fix any failure first.
 - [ ] Every stat traces to the brief or a live source you checked — none copied from this skill.
 - [ ] Every stat reads "[figure] according to [source] ([year])".
 - [ ] All external URLs verified live.
-- [ ] Unverifiable claims marked `[verify before publishing]`, not deleted.
+- [ ] During DRAFTING: unverifiable claims marked `[verify before publishing]`, not deleted.
+- [ ] **Before PUBLISH: ZERO markers remain** — every `[verify before publishing]`/`[VERIFY]`
+      is resolved (verified live via `web_research.py verify`, or the claim is cut).
+      `qc_check.py` flags leftover markers as P0; an article with a marker never ships.
 - [ ] Client credentials are confirmed facts, not inflated.
 
 **Structure:**
