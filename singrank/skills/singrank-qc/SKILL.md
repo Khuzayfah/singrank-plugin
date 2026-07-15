@@ -65,6 +65,19 @@ P0). Exit code 1 = P0 present. Fix everything it reports before the manual pass.
 
 ---
 
+## STEP 1b — ORIGINALITY (anti-plagiarism, when the article used sources)
+
+If the draft drew on scraped/researched material, run the originality guard against the
+source facts:
+```
+python C:\Users\natur\singrank-plugin\singrank\tools\originality_check.py \
+    <draft.html> --sources <facts.jsonl / PACK.md from smart_scrape/deep_research>
+```
+- **LIFTED** (8+ consecutive words matching a source) = **P0** — copy-paste; the sentence
+  must be rewritten from understanding (see singrank-synthesis).
+- **ECHO** (paraphrase too close) = P1 — reword in our voice.
+Exit 1 blocks publish. Originality checks WORDING; STEP 2 checks FACTS — both required.
+
 ## STEP 2 — FACTCHECK (30 pts — the part only you can do)
 
 Cross-verify EVERY factual element (number, price, date, named entity, quote, credential)

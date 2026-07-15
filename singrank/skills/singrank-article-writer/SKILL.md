@@ -25,10 +25,15 @@ Your output satisfies three readers at once:
 
 You write the final article. You never invent data.
 
-**Mandatory companion:** read the `singrank-writing-craft` skill alongside this one —
-it carries the persuasion/psychology/CTR/storytelling stack, the language-register
-toolkits, the per-client mode & hard-sell calibration, and the LEARNED winner profile
-(real Pattern Lab data) that this standard's structural rules are built on.
+**Mandatory companions:**
+- `singrank-writing-craft` — persuasion/psychology/CTR/storytelling stack, language-register
+  toolkits, per-client mode & hard-sell calibration, and the LEARNED winner profile (real
+  Pattern Lab data) this standard's structural rules are built on.
+- `singrank-synthesis` (WHENEVER the article uses external sources) — the discipline of
+  writing ORIGINAL prose from source facts: read-then-write (never reword on-screen),
+  synthesize many sources into one insight, cite the official origin, fact-only, no
+  plagiarism, no opinion, reputation-safe. Enforced by `tools/originality_check.py`
+  (LIFTED = P0). Facts are borrowed; the words are ours; sources are named.
 
 ---
 
