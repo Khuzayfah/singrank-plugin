@@ -214,6 +214,13 @@ Path: `C:\Users\natur\singrank-plugin\singrank\tools\` (Python 3, requests+bs4 �
 | `qc_check.py <article.html> --base-url <domain> --lang <en\|id>` | Deterministic QC half (60/100 pts): live link check, capsule sizes, FAQ extractability, banned filler, burstiness, language-mix (P0), schema deprecation lint (P0), word floor. Exit 1 = P0 | Every article before publish (singrank-qc Step 1) |
 | `deep_research.py --keyword "<kw>" --urls <top10...>` | SERP top-10 teardown: benchmark (median words/tables/freshness/schema), coverage matrix (must-cover), ⭐ gap candidates (≤2 pages cover), question bank, fact bank with source URLs | Before writing any new article (singrank-deep-research Phase 2) |
 | `publish_prep.py shopify <file> --max-kb 25` / `publish_prep.py ricos <file>` | Beats the push limits: Shopify block-boundary chunking (>30KB bodies → create+append or theme-snippet route) · Wix HTML→RICOS JSON conversion in batches (create draft → append updates → one UPDATE_PUBLISH) — each with a push-sequence manifest | Every article push to Shopify/Wix (see seo-platforms PUSH PLAYBOOK) |
+| `rewrite_prep.py inventory <url> --queries "<winning GSC queries>"` → `angles` → `diff old new` | Safe-rewrite engine: inventories the live article, LOCKS the H1 + query-carrying headings + every internal link; `angles` prints what may/may-not change; `diff` is the pre-upload gate (exit 1 if links lost, >15% shrink, or protected heading weakened). Similar keywords found during rewrite → SIBLING article, never stuffed into the rewrite | Every rewrite/refresh of an existing article (no-delete rule, mechanized) |
+| `llm_local.py "<prompt>" [--file f] [--check]` | LOCAL model (Ollama qwen2.5:14b on the RTX 5080, localhost:11434) — token-free heavy lifting: summarize scraped pages, first-pass rewrite drafts, bulk classification, title variants. Output = draft input ONLY; always passes the same QC gates | When the task is bulk/mechanical language work — save Claude tokens for strategy, final writing, and QC |
+
+**Ecosystem backup: `D:\database\`** — the full system (plugin, tools, CLAUDE.md,
+memory, workflows) mirrored with a start-here `ECOSYSTEM.md` so any fresh
+session/agent understands everything even if this environment is lost. Refresh with
+`D:\database\sync.bat` after meaningful skill/memory changes.
 
 Rule of thumb: **search** with Claude's WebSearch; **fetch/verify/audit/QC** with these
 tools (deterministic, exit codes, repeatable).
@@ -319,6 +326,7 @@ exactly 1 EXISTING category + 3–5 tags. Never invent a new category.
 | "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |
 | "tulis artikel" / "write article" | **singrank-article-writer** + **singrank-writing-craft** |
 | "artikel selanjutnya apa" / "cari gap" / "bedah top 10" / "deep research" | **singrank-deep-research** (or /seo-gap-article end-to-end) |
+| "rewrite artikel" / "refresh artikel" / "perbaiki artikel existing" | `rewrite_prep.py inventory→angles→diff` + `rank_reasons {url}` → article-writer (keep URL, keep protected headings; similar keywords → sibling article) |
 | "improve copy" / "bikin persuasif" / "headline" / "judul CTR" / "psikologi marketing" / "storytelling" | **singrank-writing-craft** |
 | "laporan bulanan" / "monthly report" | `client_action_briefing` → **seo-agency** PB-8 |
 | "tren klien" / "how is X doing" | `brain{doc:'content'}` / `client_action_briefing` → **seo-kb** |

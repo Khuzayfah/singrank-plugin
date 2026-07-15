@@ -1,6 +1,6 @@
 {
   "name": "singrank",
-  "version": "2.9.0",
+  "version": "3.0.0",
   "description": "SingRank SEO/GEO agency system — master playbook (10 scoring formulas + client roster), winning pipeline (idea → publish → track), QC blocking gate, 8 specialist agents, 11 commands, 10 skills, and bundled Python tools (live audit, web research/factcheck, deterministic QC) covering audits, recovery, keywords, GEO/AI-search, Wix/Shopify/Squarespace execution, articles, and reporting for Singapore & Indonesia clients.",
   "author": {
     "name": "Khuzayfah Redo",
