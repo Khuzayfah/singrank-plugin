@@ -243,10 +243,18 @@ FINDING:    [specific problem with URL]
 EVIDENCE:   [data point / MCP result proving it]
 IMPACT:     [estimated effect on ranking/traffic/CTR]
 FIX:        [exact steps + tool used]
+VERIFY-BY:  [the leading indicator that proves the fix worked, and when to check it —
+             e.g. "GSC impressions on query X recover within 28d (SDS ≥2.0)";
+             falsifiable: if the indicator does NOT move by the date, the diagnosis
+             was wrong — log via log_experiment and revisit]
 SEVERITY:   [Critical / High / Medium / Low]
 CONFIDENCE: [Confirmed / Likely / Hypothesis]
 PRIORITY:   [number from F1]
 ```
+
+Every recommendation must be falsifiable: if you cannot name the indicator that would
+prove it failed, you do not understand the problem yet — investigate further before
+recommending.
 
 ---
 

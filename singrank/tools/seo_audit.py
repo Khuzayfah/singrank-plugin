@@ -192,12 +192,25 @@ def audit_page(url, host):
     if not types:
         p["warnings"].append("no JSON-LD schema found")
 
-    # images alt
+    # images: alt, lazy loading, responsive srcset, modern formats
     imgs = soup.find_all("img")
     noalt = [i for i in imgs if not (i.get("alt") or "").strip()]
     p["images"] = len(imgs); p["images_no_alt"] = len(noalt)
     if imgs and len(noalt) / len(imgs) > 0.3:
         p["warnings"].append(f"{len(noalt)}/{len(imgs)} images missing alt")
+    if len(imgs) >= 5:
+        lazy = sum(1 for i in imgs if (i.get("loading") or "").lower() == "lazy")
+        srcset = sum(1 for i in imgs if i.get("srcset") or i.get("data-srcset"))
+        modern = sum(1 for i in imgs if re.search(
+            r"\.(webp|avif)(\?|$)", (i.get("src") or "") + (i.get("srcset") or ""), re.I))
+        modern += len(soup.select("picture source[type='image/webp'], picture source[type='image/avif']"))
+        p["images_lazy"] = lazy; p["images_srcset"] = srcset; p["images_modern_fmt"] = modern
+        if lazy == 0:
+            p["warnings"].append(f"0/{len(imgs)} images use loading=lazy (CWV/LCP)")
+        if srcset == 0:
+            p["warnings"].append("no responsive srcset on any image")
+        if modern == 0:
+            p["warnings"].append("no WebP/AVIF detected (all legacy formats)")
 
     # word count / thin
     for tag in soup(["script", "style", "nav", "footer", "header", "noscript"]):

@@ -665,16 +665,18 @@ Factor 4: User Signals (weight 0.15)
   0.1 → CTR <50% of expected + users exit immediately (near-zero scroll)
 
 Factor 5: GEO Readiness (weight 0.15)
-  1.0 → All major AI crawlers allowed + /llms.txt present + SSR + ≥7/9 GEO checklist
+  1.0 → All major AI crawlers allowed + SSR + ≥7/9 GEO checklist
   0.7 → AI crawlers allowed + SSR content + fails 2-3 GEO checks
-  0.4 → AI crawlers allowed but JS-rendered body OR no llms.txt
+  0.4 → AI crawlers allowed but JS-rendered body
   0.0 → GPTBot or ClaudeBot blocked OR site behind JS wall
+  (llms.txt no longer scores here — 2026 evidence shows no citation correlation;
+   it's hygiene, not a recovery factor)
 
 RPS = (F1×0.25) + (F2×0.25) + (F3×0.20) + (F4×0.15) + (F5×0.15)
 ```
 
 Worked example: 
-F1=0.7 (CWV pass, 2 broken links), F2=0.4 (thin content, stale), F3=0.7 (6 RDs, OK anchors), F4=0.4 (low CTR), F5=0.7 (AI allowed, no llms.txt)
+F1=0.7 (CWV pass, 2 broken links), F2=0.4 (thin content, stale), F3=0.7 (6 RDs, OK anchors), F4=0.4 (low CTR), F5=0.7 (AI allowed, fails 2 GEO checks)
 RPS = (0.7×0.25)+(0.4×0.25)+(0.7×0.20)+(0.4×0.15)+(0.7×0.15)
     = 0.175 + 0.10 + 0.14 + 0.06 + 0.105 = **0.58 → Deep Intervention path**
 

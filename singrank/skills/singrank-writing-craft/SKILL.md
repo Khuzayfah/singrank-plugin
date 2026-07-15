@@ -57,6 +57,22 @@ negative correlation (e.g. don't strip H3s from a live ranking page; just don't 
 pages around them). Copy structure from `winning_patterns.exemplarWinners` for the
 client at hand.
 
+**External GEO benchmarks (2026 industry studies — layer on top of our own data):**
+- Citation lift by technique: **quotations +41% · statistics +32% · source citations
+  +30%**; fluency-only ≈ zero; keyword stuffing = negative. Prioritise quotes and stats
+  over polish.
+- **~44% of AI citations come from the first 30% of the text** — put the most
+  citation-worthy material (Key Takeaway, best stat, the comparison table) in the top
+  third, never saved for the finale.
+- **AI models lift TABLES almost verbatim** — every comparison/cost/spec topic gets a
+  real table; it is the single most-extracted format. (Winner exemplars confirm:
+  cost guides and "X vs Y (With Real Prices)" pieces dominate.)
+- Google top-10 ↔ AI-cited overlap is now **below 20%** — write for extraction on its
+  own merits; a page-2 Google article can still win AI citations.
+- **86% of AI citations come from brand-managed sources** (first-party site + listings/
+  reviews/directories) — GBP, directory, and review-profile completeness is content
+  work, not "someone else's channel".
+
 ---
 
 ## 2. COPYWRITING STACK (Schwartz · Ogilvy · Sugarman · Cialdini — truth-bound)

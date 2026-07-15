@@ -161,8 +161,10 @@ approval exists for that client.
 - `suggest_interlinks` → add 3–5 contextual inbound links from relevant
   existing pages TO the new page (kills orphan status day one), and outbound
   links from the new page to money pages.
-- GEO: verify answerability (`geo_answerability_score`), llms.txt updated if
-  the client has one, schema valid, citation magnets present.
+- GEO: verify answerability (`geo_answerability_score`), schema valid, citation
+  magnets present, citation-worthy material front-loaded (44% of AI citations
+  come from the first 30% of the text), ≥1 comparison table where the topic
+  allows (AI models lift tables almost verbatim).
 - Anchor discipline: check F8 — no exact-match anchor stuffing.
 
 **GATE 8:** New page has ≥3 inbound internal links and passes answerability;

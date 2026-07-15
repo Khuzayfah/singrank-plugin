@@ -20,13 +20,22 @@ metadata:
 Optimizes client content and site configuration for citation by AI engines:
 ChatGPT, Perplexity, Google AI Overviews, Gemini, Claude.ai, and AI Mode.
 
-**Context (June 2026):**
+**Context (updated July 2026):**
 - ChatGPT: ~63% of B2B AI search referrals
 - Claude: ~18.5% (up from 1.4% eight months ago — fastest growing)
 - Gemini: ~10.6% | Perplexity: ~7.3%
 - Only 11% of domains appear on BOTH ChatGPT and Google AI Overviews for same queries
-- 55% of AI Overview citations come from the first 30% of page content
-- Content updated <3 months ago has 3× higher citation likelihood
+- **Google top-10 ↔ AI-cited overlap has dropped below 20%** (from ~70%) — ranking well
+  in Google no longer guarantees AI citations; treat them as two channels
+- ~44% of AI citations are pulled from the FIRST 30% of the text — front-load the
+  citation-worthy material
+- **AI models lift TABLES almost verbatim** — comparison tables are among the
+  highest-yield citation formats
+- Citation lift by technique (2026 benchmarks): quotations +41% · statistics +32% ·
+  citations/source links +30% · fluency-only ≈ 0 · keyword stuffing = negative
+- **86% of AI citations come from brand-managed sources** (44% first-party sites + 42%
+  listings/reviews/directories) — GBP, directories, and review profiles are GEO work
+- Content updated <3 months ago has ~3× higher citation likelihood
 
 ---
 
@@ -138,14 +147,26 @@ Flag: any of these listed under Disallow: / → CRITICAL
 - Raw HTML source must contain ALL critical content (title, H1, body, schema)
 - If content is JS-rendered → AI crawlers see empty pages → zero citation potential
 
-### LAYER 2 — /llms.txt (AI Context File)
+### LAYER 2 — /llms.txt (AI Context File) — DEMOTED TO LOW PRIORITY (2026 evidence)
 
-llms.txt is a plain-text file at `domain.com/llms.txt` that tells AI systems what your site
-is about, what your key content is, and how to reference you.
-Spec: `github.com/AnswerDotAI/llms-txt`
+**Honest 2026 status — do not oversell this to clients:**
+- Google is on record (Illyes, Jul 2025; Mueller compared it to the keywords meta tag)
+  that Search does NOT read llms.txt and won't.
+- Across 515M analyzed LLM-bot traffic events, requests touching /llms.txt are
+  statistically negligible — the bots that matter for AI citations barely fetch it.
+- SE Ranking's XGBoost study across 300k domains: llms.txt presence does NOT correlate
+  with AI citation frequency (removing the variable IMPROVED model accuracy).
+- Where it DOES work: the agentic web — IDE agents, MCP clients, and coding agents fetch
+  it constantly. Useful hygiene, not a citation lever.
 
+**Policy:** create/maintain llms.txt as cheap hygiene when touching a site anyway, but it
+is NOT a Critical finding, NOT a GEO score driver, and never the headline of a GEO
+report. Citation levers are Layer 3 (content citability), Layer 4 (brand authority), and
+crawler ACCESS (Layer 1) — spend effort there.
+
+llms.txt spec: `github.com/AnswerDotAI/llms-txt`
 **Audit:** Does `domain.com/llms.txt` exist? (`WebFetch` raw fetch)
-**Generate if missing:**
+**Generate if missing (low priority):**
 
 ```markdown
 # [Company Name]
@@ -401,7 +422,7 @@ For queries where competitors appear and client doesn't:
 ```
 LAYER 1 — Access:
 [ ] robots.txt allows all major AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended)
-[ ] /llms.txt present and updated
+[ ] /llms.txt present (hygiene only — low priority, never blocks publish)
 [ ] All critical content in raw HTML source (not JS-injected)
 
 LAYER 2 — Structure:

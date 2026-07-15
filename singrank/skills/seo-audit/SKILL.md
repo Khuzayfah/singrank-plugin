@@ -167,9 +167,9 @@ Source: PageSpeed Insights field data tab (NOT lab data). Lab data only used for
 
 **Cat 7 — AI / GEO Readiness (6%)**
 ```
-100: all 14 AI bots allowed + /llms.txt present + SSR all critical content + ≥7/9 GEO checklist
+100: all 14 AI bots allowed + SSR all critical content + ≥7/9 GEO checklist (llms.txt = bonus hygiene, not required for 100)
  80: major AI bots allowed (GPTBot, ClaudeBot, PerplexityBot, Google-Extended) + SSR
- 50: some AI bots blocked OR /llms.txt missing OR JS-injected H1/body
+ 50: some AI bots blocked OR JS-injected H1/body (missing llms.txt alone is NOT a 50 — it's a Low/hygiene note; 2026 evidence: no citation correlation, Google ignores it)
   0: GPTBot or ClaudeBot in Disallow OR entire site JS-rendered (AI sees blank)
 ```
 
@@ -415,7 +415,7 @@ Quick AI-readiness check (full audit → use `seo-geo` skill):
 
 ```
 ✓ / ✗  robots.txt: GPTBot, ClaudeBot, PerplexityBot, Google-Extended all Allowed
-✓ / ✗  /llms.txt present at root
+✓ / ✗  /llms.txt present at root (hygiene only — never a Critical; see seo-geo Layer 2 evidence)
 ✓ / ✗  Key content is server-side rendered (not JS-injected)
 ✓ / ✗  Self-contained answer blocks of ~134-167 words per H3
 ✓ / ✗  Primary answer appears in first 150 words of page
