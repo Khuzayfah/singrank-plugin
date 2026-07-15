@@ -131,7 +131,13 @@ For every planned section, gather facts in this priority order:
    sources** (independent = neither cites the other — check with source-check). Two
    sources that disagree → publish the honest RANGE with both attributions, never pick
    the convenient number.
-5. **First-party data:** `search_articles`/`get_article` for client facts already
+5. **Bulk mode (many sources, zero Claude tokens on raw pages):**
+   `python tools/smart_scrape.py --topic "<topic>" --urls <seeds...> [--depth 1]`
+   — parallel fetch → GPU embedding relevance filter → local-LLM extraction →
+   `facts.jsonl` with claim + verbatim sentence + source URL per fact. Read only
+   the distilled PACK.md; then verify the facts you'll actually use (step 3).
+   Ends with `python tools/llm_local.py --down` to free the GPU.
+6. **First-party data:** `search_articles`/`get_article` for client facts already
    published; `gsc_top_queries` for the real query language (use THEIR words as
    longtails and H2s).
 6. Relevance filter: a fact enters the brief only if it changes the reader's decision
