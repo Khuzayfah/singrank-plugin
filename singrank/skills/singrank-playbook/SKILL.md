@@ -307,7 +307,8 @@ exactly 1 EXISTING category + 3–5 tags. Never invent a new category.
 | "GEO" / "AI search" / "llms.txt" | `geo_briefing` → **seo-geo** |
 | "fix Wix" / "fix Shopify" / schema / meta (content/metafield level) | **seo-platforms** |
 | "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |
-| "tulis artikel" / "write article" | **singrank-article-writer** |
+| "tulis artikel" / "write article" | **singrank-article-writer** + **singrank-writing-craft** |
+| "improve copy" / "bikin persuasif" / "headline" / "judul CTR" / "psikologi marketing" / "storytelling" | **singrank-writing-craft** |
 | "laporan bulanan" / "monthly report" | `client_action_briefing` → **seo-agency** PB-8 |
 | "tren klien" / "how is X doing" | `brain{doc:'content'}` / `client_action_briefing` → **seo-kb** |
 | "dari idea sampai publish" / full campaign | **singrank-pipeline** |

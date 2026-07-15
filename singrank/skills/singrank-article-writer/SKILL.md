@@ -25,6 +25,11 @@ Your output satisfies three readers at once:
 
 You write the final article. You never invent data.
 
+**Mandatory companion:** read the `singrank-writing-craft` skill alongside this one —
+it carries the persuasion/psychology/CTR/storytelling stack, the language-register
+toolkits, the per-client mode & hard-sell calibration, and the LEARNED winner profile
+(real Pattern Lab data) that this standard's structural rules are built on.
+
 ---
 
 ## INPUT REQUIRED
@@ -280,16 +285,29 @@ One micro-story per article minimum, placed in the Desire zone: a real project/c
 
 ---
 
-## PASSAGE ARCHITECTURE — THE CITATION MAGNET
+## PASSAGE ARCHITECTURE — THE CITATION MAGNET (H2-first, per learned winner data)
 
 AI engines use Retrieval-Augmented Generation. They score each passage alone, not the whole article. Buried answers get discarded. Therefore, lead every section with its main claim.
 
-Every H3 is a self-contained unit of **134–167 words** (research-backed optimum: Aggarwal et al., KDD 2024).
-AI engines score each passage independently — blocks outside this range extract with lower citation probability.
+**Structure per Pattern Lab winner profile (465 winners vs 517 losers, cross-client —
+re-pull `winning_patterns {domain}` per client):** winners are **H2-heavy and H3-light**
+(median 19 H2 vs only 4 H3; losers invert it at 14 H2 / 17 H3). Build the article as many
+FLAT, scannable H2 sections. Use H3 only where a genuine sub-question exists — never as
+default scaffolding.
+
+Every **H2 section** is a self-contained unit of **120–180 words** (research-backed
+optimum ~134–167w: Aggarwal et al., KDD 2024). AI engines score each passage
+independently — blocks outside this range extract with lower citation probability.
 
 1. **Answer-first (40–60 words).** The direct answer. No buildup, no context-setting.
 2. **Supporting data (60–80 words).** One Citation Magnet sentence plus a "which means" implication.
 3. **Context or trade-off (25–40 words).** One edge case, exception, or limitation.
+
+**Learned winner floors (strong-confidence rules — see `singrank-writing-craft` §1):**
+- ≥2 H2s phrased as the reader's literal question (+100% winner lift).
+- ≥5 PAA-style question lines across the piece, FAQ included (+150% lift).
+- Number density ≥4.5 per 100 words (winners 4.6 vs losers 3.7) — every section carries
+  real figures.
 
 ### Citation Magnet Formula
 
@@ -353,9 +371,12 @@ Source: Aggarwal et al., *GEO: Generative Engine Optimization*, KDD 2024 (arXiv:
 |---|---|---|---|
 | H1 | Statement or question | Primary in first 5 words | 60 characters |
 | H2 | Question (informational) or statement (transactional) | Secondary or long-tail | 70 characters |
-| H3 | Long-tail keyword as a natural phrase | Long-tail variant | 60 characters |
+| H3 | SPARINGLY — only for a genuine sub-question inside a section | Long-tail variant | 60 characters |
 
-Include the primary or secondary keyword in 30–60% of H2s — not every H2 needs the exact primary. Use keyword variants in at least 3 H3 headings.
+Include the primary or secondary keyword in 30–60% of H2s — not every H2 needs the exact
+primary. **≥2 H2s are the reader's literal question** (winner trait, +100% lift). Spread
+long-tail variants across H2s; H3s are the exception, not the scaffold (winners median 4
+H3 vs losers 17 — see `singrank-writing-craft` §1).
 
 ---
 
@@ -372,6 +393,13 @@ Map AIDA across the whole article, not just the intro.
 | Last content H2 | Desire | Strongest differentiator + Information Gain |
 | FAQ | Desire/Action | Answer objections, reduce friction |
 | Final CTA | Action | One clear next step — never "In conclusion" |
+
+**Craft layer (mandatory read: `singrank-writing-craft` skill):** diagnose the reader's
+awareness stage (Schwartz) before the outline; pick ONE emotional driver for the whole
+piece; apply the client's mode & hard-sell calibration from writing-craft §7 (RCS 80/20,
+Ablink fit-logic sell with zero prices, Saffrons soft food-blogger funnel, etc.); place
+friction reducers (guarantee, objection FAQ, WhatsApp) directly beside the CTA; peak-end —
+best verified fact mid-piece, emotional close on the CTA section.
 
 **CTA per client:**
 
@@ -449,14 +477,17 @@ Answer structure: direct answer (1 sentence) → supporting data with source (1�
 
 **Hard floor: 2,500 words for every article. Never publish below it.**
 
-| Type | Total words | H3 target | H2 sections | Min stats |
+| Type | Total words | Per-H2-block target | H2 sections | Min stats |
 |---|---|---|---|---|
-| Cluster | 2,500–2,800 | 134–167 | 6–7 | 6 |
-| Guide (default) | 2,500–3,000 | 134–167 | 7–9 | 8 |
-| Pillar | 3,000–3,800 | 134–167 | 8–10 | 10 |
-| Mega-pillar | 4,000–5,000 | 134–167 | 10–14 | 15 |
+| Cluster | 2,500–2,800 | 120–180 | 14–18 | 6 |
+| Guide (default) | 2,500–3,000 | 120–180 | 15–20 | 8 |
+| Pillar | 3,000–3,800 | 120–180 | 18–24 | 10 |
+| Mega-pillar | 4,000–5,000 | 120–180 | 22–30 | 15 |
 
-H3 target is fixed at 134–167 words across all types — this is the AI-citation optimum per GEO research (Aggarwal et al., KDD 2024). Do not exceed 167w or drop below 134w per H3 block.
+The per-block target (~134–167w optimum, Aggarwal et al. KDD 2024) now applies at the
+**H2** level — flat, many-section structure per the Pattern Lab winner profile (median 19
+H2 / 4 H3). H3 only where a genuine sub-question exists inside a section. `qc_check.py`
+measures block sizes automatically.
 
 Default to Guide when the user does not specify. Add depth, not padding — every added section must carry a verified fact or a genuine angle.
 
@@ -501,14 +532,16 @@ Target Flesch Reading Ease 60–70 (English) or the Bahasa Indonesia equivalent.
   </div>
 
   <h2>[Secondary keyword — context]</h2>
-  <p>[Answer-first, 40–60 words]</p>
-  <h3>[Long-tail variant]</h3>
-  <p>[Answer first — 40–60 words]</p>
+  <p>[Answer-first — 40–60 words]</p>
   <p>[Citation magnet: CLAIM + NUMBER + SOURCE + "which means" implication]</p>
   <p>[Edge case or trade-off — 20–40 words]</p>
+  <!-- each H2 block = 120–180 words, self-contained -->
+
+  <h2>[Reader's literal question — at least 2 H2s like this]?</h2>
+  <p>[Answer-first block, same 3-part pattern]</p>
 
   <h2>[Solution framing]</h2>
-  <!-- ... H3 passage blocks ... -->
+  <!-- ... 15–20 flat H2 blocks for a guide; H3 only for a genuine sub-question ... -->
 
   <!-- ⭐ INFORMATION GAIN SECTION -->
 
@@ -571,7 +604,7 @@ Allow: /
 | saffrons | Saffrons Culinary Team | English (SG) | MUIS certified (state exactly), 30-plus years, "clean halal" positioning. Voice = expert food blogger; hard-sell minimal. meta = global.title_tag metafield on Shopify |
 | ablink | Ablink EV Fleet Specialists | English (British) | **NEVER state a vehicle price — link "view latest price" to the live page.** Separate body price from COE (LTA sources only). No fabricated CVES eligibility. ASAS-compliant claims. Add CPFTA disclaimers |
 | RCS | **SingRank Singapore** (author policy 2026-07-06 — team voice, not a named individual) | English (SG) | HDB Licence HB-11-5877Z, BCA, PMI, BizSafe Level 3. Never mention CaseTrust. Real package prices only, re-verified live before use |
-| yescpap | YesCPAP Clinical Team (named medical author [VERIFY] with client) | English (SG) | **YMYL MEDICAL** — ZERO health claims without named peer-reviewed or govt source. No diagnosis language. No "cures", "treats", "proven to". HCP review required for any new health claim. Medical disclaimer near foot. Schema: MedicalBusiness |
+| yescpap | **Jo Ng, RPSGT — Certified Sleep Technologist** (named YMYL author REQUIRED, Person schema; sleep technologist NOT a physician — never imply diagnosis/prescription; [VERIFY exact styling]; spelling sacred: "Jo Ng" not "Jo Ong") | English (SG) | **YMYL MEDICAL** — ZERO health claims without named peer-reviewed or govt source. No diagnosis language. No "cures", "treats", "proven to". HCP review required for any new health claim. Medical disclaimer near foot. Schema: MedicalBusiness |
 | rajawangi | Tim Editorial Rajawangi | Bahasa Indonesia | No pricing → WhatsApp +62 853-5609-1181. PKRT Kemenkes RI, Halal, IBPLA 2022. Never guarantee income. **LANE LOCK: supplies keywords only (parfum/pewangi/sabun/chemical/agen)** — business-setup topics cross-link kgteknik.co.id, never written here |
 | KG Teknik | Tim KG Teknik | Bahasa Indonesia | Branches Batam + Pekanbaru ONLY (ships nationwide — don't imply other branches). No fabricated machine/paket prices → WhatsApp. Never guarantee income; projections need explicit assumptions. **LANE LOCK: business-setup keywords only (paket/mesin/franchise/peluang usaha)** — supplies topics cross-link rajawangi.co.id |
 | dehallsg | De Hall Venue Team | English (SG) | ZERO pricing published — every cost question routes to the free 1-hr consultation. Facts from the site's PAGES only (fetch live), never its blog. De Hall Pte Ltd ROC 201931949G. Never fabricate any capacity or pricing figure |
@@ -639,8 +672,11 @@ Run every item. Fix any failure first.
 - [ ] H1 has primary keyword in first 5 words, under 60 characters.
 - [ ] Primary keyword within first 100 words.
 - [ ] Key Takeaway box sits after the opening block.
-- [ ] Every H3 opens with a 40–60 word direct answer and stays **134–167 words** (GEO-optimized block size).
-- [ ] Every H3 has one citation magnet sentence.
+- [ ] Every H2 section opens with a 40–60 word direct answer and stays **120–180 words** (GEO block size); H3 used sparingly (genuine sub-questions only).
+- [ ] Every H2 section has one citation magnet sentence.
+- [ ] ≥2 H2s phrased as the reader's literal question; ≥5 PAA-style question lines total.
+- [ ] Number density ≥4.5 per 100 words (real, sourced figures).
+- [ ] Title carries a real number and (where honest) the current year.
 - [ ] FAQ has 5+ questions with self-contained answers.
 - [ ] ⭐ Information Gain section present and labelled.
 - [ ] Final section is ONE forward-looking CTA — never "Conclusion", never two CTAs.
@@ -695,6 +731,6 @@ Would a senior specialist sign their name to this? If any sentence fits any indu
 
 ---
 
-*SingRank Article Writer v3.4 — hook-engine opening block, anti-FAQPage schema policy (engine-standard §4), machine QC gate via tools/qc_check.py*
+*SingRank Article Writer v3.5 — hook-engine opening block, anti-FAQPage schema policy (engine-standard §4), machine QC gate via tools/qc_check.py, H2-first structure + learned winner floors from Pattern Lab, craft layer in singrank-writing-craft*
 *Supports: pullupstand · saffrons · ablink · RCS · yescpap · rajawangi · KG Teknik · dehallsg · ifgshipping · livinmalaysia · matchdayaffairs · edureachsg*
 *Verified reference: Aggarwal et al., GEO: Generative Engine Optimization, KDD 2024 (arXiv:2311.09735). All in-skill example numbers are illustrative — never copy them into client articles.*
