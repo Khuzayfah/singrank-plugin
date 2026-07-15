@@ -161,6 +161,58 @@ def extract_page(url, max_chars=6000):
     out["text"] = html.unescape(text[:max_chars])
     return out
 
+SECONDARY_CUES = re.compile(
+    r"(?i)\b(according to|as reported by|source[d]? from|cited by|via |data from|"
+    r"a study by|research by|survey by|berdasarkan|menurut|dilansir|dikutip dari|"
+    r"sumber:)\s+([A-Z][\w&.\- ]{2,40})")
+ORIGINAL_MARKERS = re.compile(
+    r"(?i)\b(we surveyed|our (study|survey|data|research|analysis)|methodology|"
+    r"sample size|respondents|we analy[sz]ed|kami meneliti|survei kami|"
+    r"metodologi|official statistics|press release)\b")
+
+def source_check(url):
+    """Grade a source: PRIMARY / OFFICIAL / ORIGINAL-RESEARCH / SECONDARY / AGGREGATOR.
+    The test: is this page the ORIGIN of its claims, or is it retelling someone else's?"""
+    page = extract_page(url, max_chars=100_000)
+    out = {"url": url, "status": page.get("status"), "grade": "UNKNOWN",
+           "signals": [], "retold_sources": [], "advice": ""}
+    if page.get("status") != 200 or not page.get("text"):
+        out["grade"] = "UNREACHABLE"
+        return out
+    text = page["text"]
+    host = urllib.parse.urlparse(page.get("final_url") or url).netloc.lower()
+    if is_primary(url):
+        out["signals"].append(f"authority domain ({host})")
+    retold = list({m.group(2).strip() for m in SECONDARY_CUES.finditer(text)})[:8]
+    out["retold_sources"] = retold
+    original = bool(ORIGINAL_MARKERS.search(text))
+    if original:
+        out["signals"].append("original-research markers (methodology/survey/own data)")
+    if page.get("published"):
+        out["signals"].append(f"dated ({page['published']})")
+    else:
+        out["signals"].append("NO publish date found")
+    # grade
+    if is_primary(url):
+        out["grade"] = "PRIMARY"
+        out["advice"] = "Cite directly."
+    elif original and len(retold) <= 2:
+        out["grade"] = "ORIGINAL-RESEARCH"
+        out["advice"] = "Citable as the origin — name the publisher + year."
+    elif len(retold) >= 3:
+        out["grade"] = "AGGREGATOR"
+        out["advice"] = ("This page RETELLS others. Do NOT cite it — trace the chain: "
+                         "fetch/verify the origins it names: " + ", ".join(retold))
+    elif retold:
+        out["grade"] = "SECONDARY"
+        out["advice"] = ("Retells " + ", ".join(retold) +
+                         " — cite the ORIGIN instead; use this page only as corroboration.")
+    else:
+        out["grade"] = "UNCLEAR"
+        out["advice"] = ("No authority domain, no original-research markers, no named "
+                         "sources. Treat as opinion; find a stronger source or [VERIFY].")
+    return out
+
 def verify_claim(url, claim):
     page = extract_page(url, max_chars=200_000)
     result = {"url": url, "claim": claim, "status": page.get("status"),
@@ -208,6 +260,7 @@ def main():
     f = sub.add_parser("fetch"); f.add_argument("url")
     f.add_argument("--max-chars", type=int, default=6000)
     v = sub.add_parser("verify"); v.add_argument("url"); v.add_argument("claim")
+    sc = sub.add_parser("source-check"); sc.add_argument("url")
     ap.add_argument("--json", action="store_true", help="JSON output")
     args = ap.parse_args()
 
@@ -250,6 +303,10 @@ def main():
         res = verify_claim(args.url, args.claim)
         print(json.dumps(res, indent=2, ensure_ascii=False))
         sys.exit(0 if res["confidence"] in ("EXACT", "PARAPHRASE") else 1)
+    elif args.cmd == "source-check":
+        res = source_check(args.url)
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+        sys.exit(0 if res["grade"] in ("PRIMARY", "ORIGINAL-RESEARCH") else 1)
 
 if __name__ == "__main__":
     main()

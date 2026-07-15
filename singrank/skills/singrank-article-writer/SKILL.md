@@ -248,6 +248,9 @@ INTERNAL LINK TARGETS: …     (fromAnchor → toURL, all live-confirmed, ≥5)
 MONEY PAGE + CTA: …          (the ONE conversion target + client-calibrated CTA —
                               an article without a money page is not an asset)
 SALES ANGLE: …               (one sentence: why the reader buys after this article)
+UNIQUE POV: …                (one thing ONLY this client can say — real project data,
+                              credential, first-party number. If a competitor could
+                              write the same sentence, it's not a POV)
 EMOTIONAL DRIVER: …          (one: status/security/relief/pride/FOMO/hope)
 SCHEMA: … (mark "theme-level" on Shopify)
 TARGET WORD COUNT: …

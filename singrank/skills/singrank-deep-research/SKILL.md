@@ -81,17 +81,34 @@ For every planned section, gather facts in this priority order:
 1. **Primary sources first:** WebSearch restricted to authorities (HDB/BCA/LTA/MUIS/
    gov.sg, BPS/Kemenkes/go.id, official event pages) → `python tools/web_research.py
    fetch <url>` to read; the tool flags `primary_source: true`.
-2. **Fact bank from Phase 2:** every borrowed stat gets re-verified at ITS source —
-   `python tools/web_research.py verify <source-url> "<claim>"` → only EXACT or
+2. **SOURCE AUTHENTICITY TEST — is this the origin or a reteller?**
+   `python tools/web_research.py source-check <url>` grades every candidate source:
+   - **PRIMARY** (authority domain) / **ORIGINAL-RESEARCH** (own methodology/survey/
+     data) → citable directly.
+   - **SECONDARY / AGGREGATOR** → the page retells someone else; the tool lists the
+     origins it names. **TRACE THE CHAIN:** fetch the named origin, source-check IT,
+     and cite the origin — never the reteller. A stat that survives two retellings is
+     often distorted; the origin has the exact figure, date, and context.
+   - **UNCLEAR** → treat as opinion; find a stronger source or mark `[VERIFY]`.
+3. **Fact bank from Phase 2:** every borrowed stat gets re-verified at ITS origin —
+   `python tools/web_research.py verify <origin-url> "<claim>"` → only EXACT or
    PARAPHRASE enters the brief. NOT-FOUND/UNREACHABLE → drop it or mark `[VERIFY]`.
-3. **First-party data:** `search_articles`/`get_article` for client facts already
+4. **TRIANGULATION rule for critical numbers** (prices, regulations, dates that carry
+   the sales angle): 1 PRIMARY source is enough; anything less needs **2+ independent
+   sources** (independent = neither cites the other — check with source-check). Two
+   sources that disagree → publish the honest RANGE with both attributions, never pick
+   the convenient number.
+5. **First-party data:** `search_articles`/`get_article` for client facts already
    published; `gsc_top_queries` for the real query language (use THEIR words as
    longtails and H2s).
-4. Relevance filter: a fact enters the brief only if it serves the reader's decision
-   or the sales angle. Interesting-but-useless gets cut.
+6. Relevance filter: a fact enters the brief only if it changes the reader's decision
+   or serves the sales angle — the test is "so what, for THIS reader, deciding THIS?"
+   Interesting-but-useless gets cut.
 
-**GATE 3:** provenance table complete — every stat has: claim · source URL · date ·
-confidence (EXACT/PARAPHRASE) · freshness (<24mo or flagged). ZERO unverified numbers.
+**GATE 3:** provenance table complete — every stat has: claim · ORIGIN source URL ·
+source grade (PRIMARY/ORIGINAL-RESEARCH/triangulated) · date · confidence
+(EXACT/PARAPHRASE) · freshness (<24mo or flagged). ZERO unverified numbers, ZERO
+citations of retellers.
 
 ## PHASE 4 — THE BRIEF (hand-off artifact)
 
@@ -114,6 +131,9 @@ INTERNAL LINKS (from content_brief, all live-confirmed): [fromAnchor → toURL]
 LINKS TO BUILD TO THIS PAGE: [existing articles that should link in]
 MONEY PAGE + CTA: [the ONE conversion target + client-calibrated CTA]
 SALES ANGLE: [one sentence: why the reader buys after this article]
+UNIQUE POV: [one thing ONLY this client can say — real project data, credential,
+             first-party number, lane expertise. If every competitor could write the
+             same sentence, it's not a POV. This is what makes the article un-copyable.]
 EMOTIONAL DRIVER: [one — status/security/relief/pride/FOMO/hope]
 COMPLIANCE FLAGS: [roster rules for this client]
 GAPS STILL OPEN: [anything unresolved, marked [VERIFY]]

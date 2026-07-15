@@ -190,6 +190,37 @@ one curiosity-led.
 **Heboh-but-masuk-akal test (every title/meta):** Does the article deliver it? Is the
 curiosity/benefit real? Would the reader feel tricked after reading? Any "no" → rewrite.
 
+## 6b. CTA CRAFT (the close is engineered, not appended)
+
+One CTA per article, final block — but it's built through the whole piece:
+
+**The CTA formula:** `[Outcome the reader wants] + [friction reducer] + [proof element]
++ [ONE next step]`
+- ❌ "Contact us today for all your renovation needs."
+- ✅ "Get a fixed-price quote for your 4-room flat — free, within 24 hours, from a team
+  holding HDB Licence HB-11-5877Z. WhatsApp us the floor plan."
+
+**CTA engineering checklist:**
+- [ ] Outcome-framed: names what the READER gets, not what the client does.
+- [ ] Friction reducer adjacent: free / fast / no-obligation / easy channel (WhatsApp) —
+      whichever is TRUE for this client.
+- [ ] Proof element within eye-distance: licence number, real count, certification —
+      from the roster, never invented.
+- [ ] Matches the funnel stage: informational article → soft next step (checklist,
+      consult); commercial article → direct quote/package step.
+- [ ] The objection-killing FAQ entry sits directly ABOVE the CTA (the last doubt dies
+      before the ask).
+- [ ] Urgency only if genuinely real (a dated BTO wave, a real seasonal window) — fake
+      scarcity is banned and readers smell it.
+- [ ] Mid-article: allowed ONE soft contextual pointer (a linked mention inside a
+      relevant section, e.g. the package name in the cost table) — never a second CTA
+      block, never a banner interruption.
+- [ ] Language: second person, active, ≤2 sentences, zero filler.
+
+**The close test:** read only the H1, the Key Takeaway, and the CTA. Does the promise →
+proof → ask chain hold by itself? If the CTA could sit under any article, rebuild it
+from this article's specific tension.
+
 ## 7. PER-CLIENT MODE & CALIBRATION (from the intent map — Save doc 71)
 
 | Client | Mode & voice | Hard-sell | CTA route |
