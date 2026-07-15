@@ -29,8 +29,47 @@ JSON templates, theme file pushes/publishing — use the deeper
 **Golden rules (apply to all platforms):**
 - NEVER delete articles, pages, products, or collections
 - Fix via: rewrite → redirect → canonical → strengthen → interlink
-- Body payloads > 30KB → use snippet approach (send in sections or via reference)
+- Body payloads > 30KB → use the PUSH PLAYBOOK below (never one giant call)
 - Always verify the fix landed by reading back the saved content
+
+---
+
+## ARTICLE PUSH & EDIT — KNOWN MCP LIMITATIONS + THE HANDLING PLAYBOOK
+
+Every limitation below has bitten us at least once. The prep tool for both flows:
+`python C:\Users\natur\singrank-plugin\singrank\tools\publish_prep.py`
+
+### SHOPIFY limitations → handling
+
+| # | Limitation | Handling |
+|---|---|---|
+| S1 | **Body >~30KB** rejects/truncates through Admin API, and MCP tool calls have their own payload ceiling | `publish_prep.py shopify article.html --max-kb 25` → ordered block-boundary chunks + manifest. **RCS:** `create_article` (draft) with chunk-01 → `append_to_article` for the rest (X_RCS MCP has a purpose-built append). **Other stores:** read-modify-write append via graphql grows the payload each call and is UNSAFE past ~30KB → use the THEME-SNIPPET route: body = intro chunk only; full content in `snippets/article-<handle>.liquid` via `themeFilesUpsert` (>20–30KB theme files: gist→URL push, see shopify-theme-liquid) |
+| S2 | `<script>` stripped from article/page body | All JSON-LD at THEME level, keyed to handle (Article+Breadcrumb+Speakable only) |
+| S3 | **X_RCS `list_articles` caps at newest-160** — pre-Dec-2025 RCS articles unreachable by listing | Get the ID without the list: (a) find the handle via SingRank System RAG (`search_articles` → URL → handle); (b) `graphql_query`: `{ blogs(first:5){nodes{ articles(first:1, query:"handle:<handle>"){nodes{id title}} }} }`; (c) paginate a blog's articles with cursors only as last resort |
+| S4 | Ablink dual keys: read key can't mutate | Confirm the ADMIN key is active before any `graphql_mutation`; a "success-looking" response from the read key is a lie — verify with a read-back |
+| S5 | Timeouts / partial writes on big mutations | One logical change per mutation; ALWAYS read back and compare word count vs source file before calling it done |
+| S6 | Editor strips some tags in body (`<style>`, some attrs) | Keep body semantic HTML (h2/p/ul/table/details); presentation via theme CSS |
+
+### WIX limitations → handling
+
+| # | Limitation | Handling |
+|---|---|---|
+| W1 | **Draft Posts body = RICOS JSON, not HTML** — you cannot push HTML | `publish_prep.py ricos article.html --batch-nodes 40` → converts h1-h6/p/bold/italic/links/ul/ol/blockquote/**tables**/details into RICOS nodes, batched |
+| W2 | **One-call payload too big** for a 2,500w article | Batched flow: CREATE draft with batch-01 → for each batch: GET draft, append nodes to `richContent.nodes`, UPDATE (fieldMask `draftPost.richContent`) → VERIFY node count == manifest → ONE `UPDATE_PUBLISH` at the end |
+| W3 | `ExecuteWixAPI` silently no-ops on writes | ALL writes via `CallWixSiteAPI` — no exceptions |
+| W4 | `UPDATE` on a published post only saves a draft | Published posts: action `UPDATE_PUBLISH` |
+| W5 | Echoing `memberId` back breaks the update | Strip `memberId` from every GET response before re-sending |
+| W6 | `<script>` stripped from body | Schema via `seoData.tags` script entry (head route persists) — Article+Breadcrumb+Speakable only |
+| W7 | `relatedPostIds` max 3, must be published post IDs | Cap at 3; verify targets are published |
+| W8 | Images must exist in the media manager | `UploadImageToWixSite` first, then reference the media ID in RICOS |
+| W9 | RICOS node shapes (esp. TABLE) vary by Wix version | First article per site: push ONE small throwaway draft with a table+list, GET it back, confirm Wix accepted the shapes — then push the real thing |
+
+### Universal rules for every push
+1. **Draft first, always.** `published:false` (Shopify) / draft until UPDATE_PUBLISH (Wix).
+2. **Verify after every write**: read back; word/node count must match the manifest.
+3. **Chunk, don't cram**: many small calls beat one giant call that times out halfway.
+4. Publish only with explicit approval → then `log_experiment {url, changes}`.
+5. rajawangi.co.id = Squarespace: NO API path at all — manual editor or `claude-in-chrome`.
 
 **Client → platform map (verified by live probe 2026-07-08 — Save doc id 79):**
 
