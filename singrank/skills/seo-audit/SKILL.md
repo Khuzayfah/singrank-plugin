@@ -29,6 +29,18 @@ audit (site health v2 + index coverage + links + CWV), already fused with a rank
 list, regenerated nightly at 03:45 WIB. Read this first. Use the live tools below only to go
 deeper than the precomputed doc, or if it's stale for this client.
 
+**Live crawl engine (any URL, incl. non-clients/prospects — no API key):**
+```
+python C:\Users\natur\singrank-plugin\singrank\tools\seo_audit.py <url>            # homepage + 5 sitemap pages
+python ...\tools\seo_audit.py <url> --single                                       # one page
+python ...\tools\seo_audit.py <url> --pages 15 --out report.md --json report.json
+```
+Checks live: robots.txt AI-crawler access (14 bots), llms.txt, sitemap, title/meta/canonical/
+H1/heading-order/viewport/og:image, schema types with deprecated-type lint (FAQPage/HowTo →
+issue), img alt, raw-HTML thin content (JS-rendering tell), internal/external link counts,
+noindex, redirect chains. Score 0-100. Use it to VERIFY any site_health finding on the live
+page before reporting it (Bayesian ×1.30 live-verification multiplier).
+
 **SingRank MCP (primary, live):**
 ```
 list_clients            → exact domain key
@@ -293,14 +305,17 @@ SiteLinks SearchBox, Software Application, Video, WebPage, WebSite
 
 ### RETIRED SCHEMA TYPES — Check for and Remove
 ```
-HowTo          → Retired for rich results Sept 2023 (still valid as schema, but no rich result)
+HowTo          → Retired for rich results (SingRank policy: STRIP — QC P0)
 SpecialAnnouncement → Retired July 2025 (COVID-era schema)
 MedicalBusiness → Merged into LocalBusiness
 MedicalCondition → No longer produces rich results
-FAQPage        → NOW RESTRICTED to government and healthcare authority sites (Aug 2023)
-                  For all other sites: FAQPage schema ignored for rich results
-                  Still helps GEO/AI extraction — keep it for that purpose only
+FAQPage        → Deprecated for rich results. SingRank policy (engine-standard §4 +
+                  QC v1.2 Check 6): STRIP FAQPage everywhere — flag as P0 when found.
+                  Q&A value ships as ON-PAGE CONTENT (answer-first H3 questions);
+                  AI engines extract the content, not the markup.
+                  Add Speakable on the answer-first paragraphs instead.
 ```
+`tools/qc_check.py` and `tools/seo_audit.py` both lint these automatically.
 
 ### @graph Architecture (Best Practice — link types together)
 ```json
@@ -324,7 +339,7 @@ Linked @graph = entities reinforce each other for E-E-A-T and Knowledge Panel el
 ### Minimum Schema Stack per Page Type
 ```
 All pages:    Organization + WebSite (sitewide, once)
-Blog article: Article + BreadcrumbList (+ FAQPage for GEO purposes only)
+Blog article: Article + BreadcrumbList + Speakable (NO FAQPage — content-only Q&A)
 Local page:   LocalBusiness (with address, phone, hours, geo)
 Product page: Product + BreadcrumbList (+ Review if applicable)
 Event page:   Event
@@ -375,7 +390,7 @@ JavaScript. If your critical content (title, H1, meta, canonical, body text, sch
 is injected by JS, these crawlers see a blank shell. So does Googlebot on first crawl.
 
 **How to check:**
-1. Raw source: `WebFetch {url}` — this is what a non-JS crawler (GPTBot, ClaudeBot, PerplexityBot, first Googlebot pass) actually sees.
+1. Raw source: `python tools/seo_audit.py <url> --single` (or `WebFetch {url}`) — this is what a non-JS crawler (GPTBot, ClaudeBot, PerplexityBot, first Googlebot pass) actually sees; the tool's `word_count` on raw HTML is the tell (a "thin" score on a visually rich page = JS-rendered).
 2. Rendered DOM: open the page with the `claude-in-chrome` browser tools and read the live DOM (or `read_page`) — what's visible after JS executes.
 3. Compare: if raw ≠ rendered, JS-dependent content won't reach AI crawlers.
 
@@ -404,7 +419,7 @@ Quick AI-readiness check (full audit → use `seo-geo` skill):
 ✓ / ✗  Key content is server-side rendered (not JS-injected)
 ✓ / ✗  Self-contained answer blocks of ~134-167 words per H3
 ✓ / ✗  Primary answer appears in first 150 words of page
-✓ / ✗  FAQPage schema present (GEO extraction, not rich results)
+✓ / ✗  FAQ as answer-first on-page content (≥5 Q&A); NO FAQPage schema (P0 if present)
 ✓ / ✗  dateModified updated within 6 months
 ✓ / ✗  Named expert quotes with attribution present
 ✓ / ✗  Statistics with named source + year present (not vague "studies show")

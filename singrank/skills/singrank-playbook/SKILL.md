@@ -201,6 +201,23 @@ client's own historical cause-and-effect, not industry folklore.
 
 ---
 
+## 2c. LOCAL TOOLS (plugin-bundled, no API keys — `singrank/tools/`)
+
+Path: `C:\Users\natur\singrank-plugin\singrank\tools\` (Python 3, requests+bs4 — installed).
+
+| Tool | What it does | When |
+|---|---|---|
+| `seo_audit.py <url> [--single\|--pages N]` | Live technical audit of ANY url/domain: robots.txt AI-bot access (14 bots), llms.txt, sitemap, title/meta/canonical/H1/headings/viewport/og:image, schema + deprecated-type lint, img alt, raw-HTML thin (JS tell), link counts, noindex, redirects. Score 0-100, markdown+JSON. | Live-verify audit findings; prospect/non-client audits; GEO Layer-1 check |
+| `web_research.py fetch <url>` | Clean extract: title, meta, publish date, main text, word count | Read a source/competitor page |
+| `web_research.py verify <url> "<claim>"` | Grade a claim vs the live page: EXACT / PARAPHRASE / NOT-FOUND (exit 1) | Factcheck EVERY stat before publish — NOT-FOUND = never publish |
+| `web_research.py search "<q>" [--site d] [--primary-only]` | Keyless search (Bing→DDG), flags gov/edu/official as primary. Best-effort: engines often blocked on ID networks → exit 2 tells you to use Claude's WebSearch instead | Finding sources (fallback: WebSearch) |
+| `qc_check.py <article.html> --base-url <domain> --lang <en\|id>` | Deterministic QC half (60/100 pts): live link check, capsule sizes, FAQ extractability, banned filler, burstiness, language-mix (P0), schema deprecation lint (P0), word floor. Exit 1 = P0 | Every article before publish (singrank-qc Step 1) |
+
+Rule of thumb: **search** with Claude's WebSearch; **fetch/verify/audit/QC** with these
+tools (deterministic, exit codes, repeatable).
+
+---
+
 ## 3. OPERATING PRINCIPLES (non-negotiable)
 
 1. **Evidence first.** Every claim needs MCP data or a live-verified source.
@@ -285,7 +302,8 @@ exactly 1 EXISTING category + 3–5 tags. Never invent a new category.
 | "kenapa artikel ini nggak ranking" / single-page diagnosis | `rank_reasons {url}` |
 | "keyword/artikel mana yang datengin leads beneran" | `lead_content_ideas` (real leads) |
 | "kompetitor cover topik apa yang kita belum" | `competitor_gap {domain, competitor}` (crawl first) |
-| "draft ini udah layak publish?" | `score_draft {domain, title, text}` |
+| "draft ini udah layak publish?" / "QC artikel" / "cek halusinasi" | **singrank-qc** (blocking gate) + `score_draft {domain, title, text}` |
+| "audit domain prospek / non-client" | `python tools/seo_audit.py <url>` (live, no API key) |
 | "GEO" / "AI search" / "llms.txt" | `geo_briefing` → **seo-geo** |
 | "fix Wix" / "fix Shopify" / schema / meta (content/metafield level) | **seo-platforms** |
 | "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |

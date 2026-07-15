@@ -195,14 +195,20 @@ These three rules apply to every article and page SingRank ships — SingRank, R
 - 5+ internal links per article. First within 500 words. Descriptive anchors matching the destination keyword. Never "click here".
 - No live, relevant target? Write fewer links. Never invent a URL.
 
-### 2. FAQ section + FAQPage schema shipped WITH the body
-- Every article and page ends with a FAQ: 5+ natural-language questions in `<details><summary>` HTML.
-- The FAQPage JSON-LD must travel with the body. Output the `<script type="application/ld+json">` block right after the article HTML — never as a "maybe later" step.
-- The JSON-LD entries must match the visible `<details>` Q&A exactly — same questions, same answers.
-- **Per-platform injection (the only thing that changes):**
-  - WordPress, Wix, custom, headless: keep the `<script>` JSON-LD inside the body. It persists.
-  - Shopify: the editor and Admin API strip `<script>` from article/page body. So inject the identical JSON-LD at theme level — a snippet or the article/page template, keyed to the handle. The schema still ships with the content; only the layer moves.
-- Validate every FAQPage block in Google Rich Results Test. Zero errors before deploy.
+### 2. FAQ as ON-PAGE CONTENT — NO FAQPage schema (engine-standard §4)
+- Every article and page ends with a FAQ: 5+ natural-language questions as `<h3>` question
+  headings (or `<details><summary>`), each answer 40–80 words, answer-first, self-contained.
+  This is what AI engines extract — the CONTENT, not the markup.
+- **Do NOT ship FAQPage or HowTo JSON-LD.** Both are deprecated for rich results; the
+  SingRank QC gate (Check 6) flags them as P0 and `tools/qc_check.py` lints them
+  automatically. Q&A value lives in the visible content.
+- Schema that DOES ship: **Article/BlogPosting + BreadcrumbList + Speakable** (on the
+  answer-first paragraphs), as a SEPARATE JSON-LD block — never inline in prose.
+- **Per-platform injection:**
+  - WordPress, Wix, custom, headless: JSON-LD block travels with the body.
+  - Shopify: the editor and Admin API strip `<script>` from article/page body → inject the
+    identical JSON-LD at theme level, keyed to the handle.
+- Validate the schema block (types match page, no placeholders). Zero deprecated types.
 
 ### 3. SEO title tag that fits the topic
 - Every deliverable opens with the on-page header block below. The title tag is mandatory and distinct from the H1.
@@ -225,24 +231,35 @@ TARGET WORD COUNT: …
 
 ## PRE-WRITING: DATA VERIFICATION
 
-Run these four checks before writing. The full search-prompt template lives in `references/data-search-prompts.md` — read it when the brief has data gaps.
+Run these four checks before writing, using the plugin's own tools
+(`C:\Users\natur\singrank-plugin\singrank\tools\`). The full search-prompt template lives in
+`references/data-search-prompts.md` — read it when the brief has data gaps.
 
-1. **Verify all statistics.** For every stat in the brief, confirm the source URL is live and the figure matches. If a URL is dead or the figure differs, mark `[verify before publishing]`.
-2. **Find internal links.** Identify 5+ existing pages on the client domain that relate to the topic. Note the best anchor text and where each link fits.
-3. **Find external sources.** Locate 3 authoritative sources to cite. Priority: gov > edu > official industry body > established publication. Verify each URL is live.
-4. **Fill data gaps.** If the brief flags scarce data, run the targeted searches in the references file. Report what you found, or state "Data not found." Never estimate to fill the gap.
+1. **Verify all statistics.** For every stat in the brief:
+   `python tools/web_research.py verify <source-url> "<the exact claim>"` —
+   EXACT/PARAPHRASE = usable; NOT-FOUND or SOURCE-UNREACHABLE = mark
+   `[verify before publishing]` or drop the claim. Never publish a NOT-FOUND stat.
+2. **Find internal links.** Use the brief's `internalLinksToInclude`; for any extra link,
+   confirm it's live: `python tools/web_research.py fetch <url>` (status must be 200).
+3. **Find external sources.** WebSearch for candidates (the Python `search` mode is
+   best-effort — keyless engines are often blocked on this network; WebSearch always works),
+   then `fetch` each to confirm it's live and actually says what you'll cite. Priority:
+   gov > edu > official industry body > established publication. The tool flags
+   `primary_source: true` for gov/edu/official domains.
+4. **Fill data gaps.** If the brief flags scarce data, search + fetch + verify. Report what
+   you found, or state "Data not found." Never estimate to fill the gap.
 
 Begin writing only after these four checks finish.
 
 ---
 
-## AIDA × SEO INTRO FRAMEWORK
+## THE OPENING BLOCK — ANSWER CAPSULE + CURIOSITY LOOP (hook-engine standard)
 
-The introduction wins three battles at once: the reader's attention, the crawler's confidence, and the AI engine's extraction test. Apply this 5-part structure. Total intro: 80–120 words.
+The introduction wins three battles at once: the reader's attention, the crawler's confidence, and the AI engine's extraction test. Every article opens with TWO stacked elements, in this order (total intro: 80–130 words):
 
-1. **Attention hook (1–2 sentences, ≤40 words).** Use a statistic, a problem statement, a contrarian truth, or a specific number from the brief. Never use generic openers. *Pull the real figure from the brief — never the illustrative numbers in this skill.*
-2. **Interest + primary keyword (2–3 sentences, 40–60 words).** Place the primary keyword in the first 100 words. Establish who the article serves. Give one immediately useful fact. Use "you".
-3. **Key Takeaway box** (placed after the intro paragraph):
+1. **Answer capsule (GEO citation zone — 50–60 words).** Fact-first, self-contained, no dangling pronouns, primary keyword inside. This is what AI Overviews / Perplexity extract. It answers the title's promise IMMEDIATELY — never withhold the core fact for "suspense"; withholding kills AEO. *Pull the real figure from the brief — never the illustrative numbers in this skill.*
+2. **Curiosity loop (human retention zone — 1–2 sentences).** Immediately after the capsule: ONE tension the capsule did NOT resolve, framed as the reader's own next question. Formula: `[reader's situation, second person] + [the thing most people get wrong] + [explicit promise of where it's answered]`. The payoff MUST exist in the article, at the named location, and must be worth the wait — a loop paid off with fluff trains readers to distrust the brand. A loop that cannot be paid off honestly is banned (zero-fabrication wins).
+3. **Key Takeaway box** (placed after the opening block):
 ```html
 <div class="key-takeaway">
   <strong>Key Takeaway</strong>
@@ -250,8 +267,16 @@ The introduction wins three battles at once: the reader's attention, the crawler
 </div>
 ```
 This box is among the most-cited elements by AI engines. Format: claim + number + implication.
-4. **Desire (1–2 sentences).** State what the reader will know or do after reading. Never write "In this article, we will cover".
-5. **Scope signal (1 sentence).** Tell Google what the article covers, without listing headings.
+4. **Scope signal (1 sentence).** Tell Google what the article covers, without listing headings. Never write "In this article, we will cover".
+
+### Open-loop discipline (max 3 per article)
+- Loop 1: opening block (mandatory, every article).
+- Loop 2: mid-article, opened at the END of a major section, one forward-pointing sentence ("That fixes the leak. It does not fix what caused it — that's next.").
+- Loop 3 (optional, commercial pieces only): just before the offer section, priming the package/product as the resolution.
+- Every loop closes explicitly. Never stack two loops in one section. Never open a loop in the FAQ.
+
+### Storytelling injection (true stories only)
+One micro-story per article minimum, placed in the Desire zone: a real project/case in 3–5 sentences (situation → complication → outcome). Anonymise if needed; NEVER invent. No story available → use a real data narrative (before/after numbers with source) instead. Never a fictional composite presented as real.
 
 ---
 
@@ -406,15 +431,15 @@ Anchor examples — bad: "click here to learn more". Good: "HDB renovation cost 
 
 ---
 
-## FAQ SECTION — AEO ASSET
+## FAQ SECTION — AEO ASSET (content only, no FAQPage schema)
 
-The FAQ is the single highest-yield AEO element. AI engines extract Q&A pairs directly.
+The FAQ is the single highest-yield AEO element. AI engines extract the Q&A CONTENT directly — no schema needed, and FAQPage schema is banned (QC P0, see Universal Standard #2).
 
-- Minimum 5 questions in natural conversational language.
-- Use `<details><summary>` HTML for schema compatibility.
-- Each answer 40–80 words, direct, self-contained.
+- Minimum 5 questions in natural conversational language, as `<h3>` question headings (or `<details><summary>`).
+- Each answer 40–80 words, direct, self-contained (no "as above", no orphan pronouns — every answer must survive being quoted out of context).
 - Start each answer with a direct statement — not "Yes" or "No".
 - Include the primary or secondary keyword in at least 2 of the questions.
+- Never open a curiosity loop in the FAQ.
 
 Answer structure: direct answer (1 sentence) → supporting data with source (1–2) → practical implication (1).
 
@@ -488,46 +513,46 @@ Target Flesch Reading Ease 60–70 (English) or the Bahasa Indonesia equivalent.
   <!-- ⭐ INFORMATION GAIN SECTION -->
 
   <h2>FAQ: [Primary Keyword] — Questions Answered</h2>
-  <details>
-    <summary>[Natural-language question with keyword]</summary>
-    <p>[40–80 word self-contained answer with citation magnet]</p>
-  </details>
-  <!-- minimum 5 FAQ entries -->
+  <h3>[Natural-language question with keyword]?</h3>
+  <p>[40–80 word self-contained answer with citation magnet]</p>
+  <!-- minimum 5 FAQ entries — content only, NO FAQPage schema -->
 
   <h2>[Forward-looking CTA heading — never "Conclusion"]</h2>
-  <p>[60–100 words. Client CTA. Next step. No summary of what was covered.]</p>
+  <p>[60–100 words. ONE client CTA. Next step. No summary of what was covered.]</p>
 </article>
 
-<!-- FAQPage JSON-LD travels WITH the body. WordPress/Wix/custom: keep it inside the body. Shopify: move this identical block to theme level — Admin strips <script> from body. -->
+<!-- Schema = SEPARATE JSON-LD block. WordPress/Wix/custom: travels with the body. Shopify: theme level (Admin strips <script> from body). NO FAQPage. NO HowTo. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    { "@type": "Question", "name": "[Q1 — matches a <summary>]",
-      "acceptedAnswer": { "@type": "Answer", "text": "[A1 — matches the <details> answer]" } }
-    /* one entry per details/summary pair */
+  "@graph": [
+    { "@type": "Article", "headline": "[title]", "author": {"@type": "Organization", "name": "[client byline]"},
+      "datePublished": "[ISO]", "dateModified": "[ISO]", "publisher": {"@type": "Organization", "name": "[client]"} },
+    { "@type": "BreadcrumbList", "itemListElement": [ /* home → blog → article */ ] },
+    { "@type": "WebPage", "speakable": { "@type": "SpeakableSpecification",
+        "cssSelector": [".key-takeaway", "article > p:first-of-type"] } }
   ]
 }
 </script>
 ```
 
-After the HTML, output the full schema plan (Article + FAQPage + BreadcrumbList + any page-type schema). On Shopify, deliver every block at theme level, keyed to the handle.
+After the HTML, output the full schema plan. On Shopify, deliver every block at theme level, keyed to the handle.
 
 ---
 
-## SCHEMA PLAN (FAQPage already ships in the body; list the rest here)
-
-FAQPage JSON-LD is embedded with the body above (theme-level on Shopify). This plan lists every schema type the page still needs. On Shopify, deliver ALL of it at theme level, keyed to the handle.
+## SCHEMA PLAN (allowed types only — engine-standard §4/§5)
 
 ```
-SCHEMA TO ADD (validate via Google Rich Results Test — zero errors before deploy):
-- Article: headline, author, datePublished, dateModified, publisher
-- FAQPage: one entry per details/summary pair
+SCHEMA TO ADD (separate JSON-LD block; validate types match the page, no placeholders):
+- Article/BlogPosting: headline, author, datePublished, dateModified, publisher
 - BreadcrumbList
-- HowTo: if the article contains step-by-step instructions
-- LocalBusiness: if it is a local SEO page
+- Speakable: on the answer-first paragraphs (Key Takeaway + capsule)
+- LocalBusiness / Service / Product / ProductGroup / Event / EducationalOrganization /
+  MedicalBusiness: only when the page type genuinely matches (per client roster)
 - Person: if the byline is a named individual
+
+BANNED (QC P0 — tools/qc_check.py lints these): FAQPage, HowTo, SpecialAnnouncement.
+Q&A and step-by-step value lives in the visible content instead.
 
 AUTHOR ENTITY: use the client byline from Client Context below.
 
@@ -613,12 +638,19 @@ Run every item. Fix any failure first.
 **Structure:**
 - [ ] H1 has primary keyword in first 5 words, under 60 characters.
 - [ ] Primary keyword within first 100 words.
-- [ ] Key Takeaway box sits after the intro.
+- [ ] Key Takeaway box sits after the opening block.
 - [ ] Every H3 opens with a 40–60 word direct answer and stays **134–167 words** (GEO-optimized block size).
 - [ ] Every H3 has one citation magnet sentence.
 - [ ] FAQ has 5+ questions with self-contained answers.
 - [ ] ⭐ Information Gain section present and labelled.
-- [ ] Final section is a forward-looking CTA — never "Conclusion".
+- [ ] Final section is ONE forward-looking CTA — never "Conclusion", never two CTAs.
+
+**Hook-gate (hook-engine standard):**
+- [ ] Answer capsule present: 50–60 words, fact-first, resolves the title's promise.
+- [ ] Curiosity loop present, paid off honestly at the named location.
+- [ ] ≤3 open loops; all closed explicitly; none in the FAQ.
+- [ ] ≥1 true micro-story or real data narrative in the Desire zone.
+- [ ] No loop misleads; no unpaid promise (auto-fail if violated).
 
 **Length & keywords:**
 - [ ] Article is at least 2,500 words.
@@ -645,22 +677,24 @@ Run every item. Fix any failure first.
 
 **Universal on-page standard (all clients, all platforms):**
 - [ ] Every internal link points to a live, topic-relevant page — zero broken links.
-- [ ] FAQ section present; FAQPage JSON-LD ships with the body (theme-level on Shopify); entries match the visible Q&A.
+- [ ] FAQ section present as content; NO FAQPage schema anywhere.
 - [ ] Title tag 50–60 chars, primary keyword first, distinct from H1; meta description 150–160 chars.
 
 **Schema:**
-- [ ] Schema plan included after the HTML.
-- [ ] FAQPage entries match the details/summary pairs.
+- [ ] Separate JSON-LD block: Article/BlogPosting + BreadcrumbList + Speakable (+ genuine page-type schema per roster).
+- [ ] ZERO deprecated types (FAQPage/HowTo/SpecialAnnouncement) — `tools/qc_check.py` flags them as P0.
 
 **Senior specialist test:**
 Would a senior specialist sign their name to this? If any sentence fits any industry, rewrite it. If any claim lacks a source, add one or remove the claim.
 
-**Pattern Lab gate (run last, after all of the above pass):**
-- [ ] `score_draft {domain, title, text}` returns ≥80. If below, fix the failing checklist items and re-score — don't publish on a lower score without flagging it to the user.
+**Machine QC gate (run last, after all of the above pass):**
+- [ ] `python tools/qc_check.py <article.html> --base-url https://<client-domain> --lang <en|id>`
+      exits 0 (zero P0: no broken links, no deprecated schema, no language mix, word floor met).
+- [ ] `score_draft {domain, title, text}` (SingRank MCP) returns ≥80. If below, fix the failing checklist items and re-score — don't publish on a lower score without flagging it to the user.
 - [ ] After publish: `log_experiment {url, changes}` called — this is what lets `experiment_results` validate the fix in 21+ days.
 
 ---
 
-*SingRank Article Writer v3.3*
+*SingRank Article Writer v3.4 — hook-engine opening block, anti-FAQPage schema policy (engine-standard §4), machine QC gate via tools/qc_check.py*
 *Supports: pullupstand · saffrons · ablink · RCS · yescpap · rajawangi · KG Teknik · dehallsg · ifgshipping · livinmalaysia · matchdayaffairs · edureachsg*
 *Verified reference: Aggarwal et al., GEO: Generative Engine Optimization, KDD 2024 (arXiv:2311.09735). All in-skill example numbers are illustrative — never copy them into client articles.*

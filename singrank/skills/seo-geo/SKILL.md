@@ -104,6 +104,9 @@ Execute layers in order. Layer 1 failures block all other layers — fix first.
 
 If AI crawlers are blocked, zero GEO impact regardless of content quality.
 
+One-command check for this whole layer (14 AI bots + llms.txt + raw-HTML/SSR tell):
+`python C:\Users\natur\singrank-plugin\singrank\tools\seo_audit.py <domain>`
+
 **Check robots.txt** (`WebFetch https://domain.com/robots.txt`):
 ```
 Required: these crawlers must be ALLOWED
@@ -354,7 +357,7 @@ For queries where competitors appear and client doesn't:
 **Optimization:**
 - Must rank in top 10 organically first (AI Overview draws from ranked content)
 - Content in first 30% of page (55% of citations from top third)
-- FAQPage schema (even if not eligible for rich results, helps AIO extraction)
+- FAQ as answer-first on-page content (NO FAQPage schema — SingRank policy, QC P0; the content is what AIO extracts)
 - Author schema with verified credentials
 - Long-form content (3000+ words) signals depth
 
@@ -368,7 +371,7 @@ For queries where competitors appear and client doesn't:
 **Optimization:**
 - AI Mode activates on complex, multi-faceted queries (not simple lookups)
 - Content must answer follow-up questions in depth — 1500+ words, multiple subtopics covered
-- FAQPage schema + nested Q&A in body helps AI Mode chain answers
+- Nested Q&A in the body content helps AI Mode chain answers (content only — no FAQPage schema)
 - Product schema critical for e-commerce clients in AI Mode shopping results
 - Focus on establishing "source of record" for a narrow topic cluster
 

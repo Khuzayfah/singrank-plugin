@@ -132,12 +132,14 @@ Hand the brief to **singrank-article-writer**. Standards (hard floor):
 - Language per market: British EN (SG) / Bahasa Indonesia EYD V (ID)
 - Byline per client rules (e.g., Iman Yusoff for IFG/Livin)
 
-**GATE 6 (auto-iterate ≤3×):** `score_draft {domain, title, text}` ≥80 against
-the client's own winner profile, AND: word count ≥2500; every claim traceable
-to brief sources; keyword floors met; no health/pricing/transit-time
-fabrications per client constraints. On FAIL: fix the exact failing checklist
-items, re-score. After the 3rd fail, STOP and escalate to the user with the
-blocking issues — never publish a failing draft, never loop forever.
+**GATE 6 (auto-iterate ≤3×):** run the **singrank-qc** skill (blocking gate):
+(1) machine pass `python tools/qc_check.py <draft.html> --base-url <domain>
+--lang <en|id>` — zero P0; (2) factcheck every claim via
+`tools/web_research.py verify` — zero NOT-FOUND; (3) roster compliance +
+hook-gate; AND `score_draft {domain, title, text}` ≥80 against the client's
+own winner profile. On FAIL: fix the exact failing items, re-run. After the
+3rd fail, STOP and escalate to the user with the blocking issues — never
+publish a failing draft, never loop forever.
 
 ## STAGE 7 — Publish (platform-correct, draft-first)
 
