@@ -45,12 +45,45 @@ Start from SingRank System — the weapon:
    head terms via Autocomplete + kwvol + Trends. Rows with source `gsc` = real volume;
    `trends` = estimate; `autocomplete` = idea. State the confidence.
 
-**GATE 1:** candidate keyword list where each has: demand evidence (volume or real
-impressions), a client money page it can feed, intent_fit ≥0.7, a PASSED 3-part
-cannibalization test (distinct intent / distinct SERP / distinct funnel-or-entity vs
-every live article — `find_cannibalization` + `search_articles`), and lane-lock
-clearance (KG Teknik ↔ Rajawangi). Score with ROS/CPS (playbook F2/F9), present the
-top 3–5, pick one (ask the user if the choice isn't obvious).
+## PHASE 1b — SIBLING EXPANSION (mine our OWN high-impression assets)
+
+The cheapest new winner is a SIBLING of an existing winner: Google already shows us
+demand it half-trusts us for. Mine SingRank System for it:
+
+1. **High-impression, weak-position clusters:** `keyword_gap.topicClusters` where
+   impressions are large but avgPosition >15 (e.g. a cluster pulling 20k impressions at
+   pos 30 = massive proven demand we're failing). Decide per cluster: strengthen the
+   existing page (interlinks + rewrite via `rank_reasons`) OR spin a SIBLING article at
+   a DIFFERENT angle the cluster's queries reveal.
+2. **Winner-page overflow queries:** `gsc_top_pages` → for each high-impression winner,
+   `gsc_top_queries` / the page's query list → queries it gets impressions for but
+   whose INTENT it doesn't actually serve (a size-guide page pulling "renovation cost"
+   impressions serves the wrong intent) → each mismatched high-impression query is a
+   sibling candidate.
+3. **High-impression queries with no dedicated page:** `gsc_top_queries {sort_by:
+   'impressions'}` at position >10 → cross-check `search_articles` — no page whose
+   primary intent matches → sibling candidate.
+4. **Angle spin via the 9-angle matrix** (pipeline Stage 2): one winning topic legally
+   becomes up to 9 articles — cost guide / comparison / area page / problem→solution /
+   timeline / mistakes / rules / package / case story — each a DIFFERENT primary
+   intent. A winner on "X rules" with big impressions almost always supports a sibling
+   on "X cost" and "X timeline". Copy the winner's exact structure
+   (`winning_patterns.exemplarWinners`) with the new angle's content.
+
+Sibling candidates enter the same GATE 1 below — the 3-part cannibalization test is
+what keeps "similar" from becoming "competing": a sibling passes ONLY with a distinct
+primary intent, materially different SERP, and distinct funnel stage or entity. Fails →
+it's a strengthen-the-original job, not a new article.
+
+**GATE 1:** candidate keyword list (external gaps from Phase 1 + siblings from Phase
+1b) where each has: demand evidence (volume or real impressions), a client money page
+it can feed, intent_fit ≥0.7, a PASSED 3-part cannibalization test (distinct intent /
+distinct SERP / distinct funnel-or-entity vs every live article —
+`find_cannibalization` + `search_articles`), and lane-lock clearance (KG Teknik ↔
+Rajawangi). Score with ROS/CPS (playbook F2/F9) — a sibling with high proven
+impressions usually outranks an external gap with estimated volume, because the demand
+is already OURS to lose. Present the top 3–5, pick one (ask the user if the choice
+isn't obvious).
 
 ## PHASE 2 — SERP TEARDOWN (what does winning look like?)
 

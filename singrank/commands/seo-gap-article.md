@@ -7,8 +7,13 @@ Run the **singrank-deep-research** skill end-to-end for: **$ARGUMENTS**, then wr
 
 1. **Phase 1 — Gap hunt (SingRank System first):** `brain{doc:'content'/'ideas'}` →
    `keyword_gap` + `competitor_gap` + `content_targets` + `lead_content_ideas` →
-   `keyword_research` for keywords OUTSIDE our footprint. Gate: demand evidence +
-   money page + intent_fit ≥0.7 + 3-part cannibalization test + lane locks.
+   `keyword_research` for keywords OUTSIDE our footprint.
+   **Phase 1b — Sibling expansion (our own high-impression assets):** high-impression
+   weak-position clusters, winner-page overflow queries (impressions on the wrong
+   intent), high-impression queries with no dedicated page, 9-angle spins of proven
+   winners. Siblings with proven impressions usually beat external gaps with estimated
+   volume. Gate for ALL candidates: demand evidence + money page + intent_fit ≥0.7 +
+   3-part cannibalization test + lane locks.
    Present top 3–5 candidates with ROS/CPS math; confirm the pick.
 2. **Phase 2 — SERP teardown:** WebSearch top-10 →
    `python tools/deep_research.py --keyword "<kw>" --urls ...` → beat-plan
