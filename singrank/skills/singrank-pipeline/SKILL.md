@@ -128,7 +128,7 @@ Hand the brief to **singrank-article-writer**. Standards (hard floor):
 - Key Takeaway box near the top
 - Citation magnets (quotable stats/definitions AI engines lift)
 - 6 keyword floors respected
-- FAQ section + FAQPage schema (JSON-LD)
+- FAQ section as on-page content — NO FAQPage schema (P0); schema = Article + BreadcrumbList + Speakable, separate block
 - Language per market: British EN (SG) / Bahasa Indonesia EYD V (ID)
 - Byline per client rules (e.g., Iman Yusoff for IFG/Livin)
 
@@ -149,8 +149,8 @@ Via **seo-platforms**:
   level; body >30KB → snippet approach; ablink → draft theme 183046078779
   only, confirm admin key first.
 - Wix: `CallWixSiteAPI` Draft Posts (create draft; publish via
-  UPDATE_PUBLISH when approved); FAQ schema via seoData script tag;
-  relatedPostIds max 3.
+  UPDATE_PUBLISH when approved); schema (Article/BreadcrumbList/Speakable —
+  never FAQPage) via seoData script tag; relatedPostIds max 3.
 
 **GATE 7:** Published as DRAFT first. Meta title ≤60 chars, meta description
 140–155 chars, CTR-optimized. User approves before going live unless standing

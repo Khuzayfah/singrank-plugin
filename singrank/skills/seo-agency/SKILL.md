@@ -558,7 +558,7 @@ Check each target URL for:
 - XML sitemap: present, submitted to GSC, no broken URLs
 - Internal links: min 5 per page, no broken links
 - Image alt text: descriptive, not empty
-- Schema: at least Article + FAQPage (or LocalBusiness for local pages)
+- Schema: at least Article + BreadcrumbList + Speakable (or LocalBusiness for local pages); flag FAQPage/HowTo as P0 (deprecated — strip)
 - Redirect chains: no 301→301 chains, no meta refresh
 - HTTPS: full site, no mixed content
 - CWV signals: LCP ≤2.5s, INP ≤200ms, CLS ≤0.1
@@ -568,7 +568,7 @@ Check each target URL for:
 Step 3: Content Assessment
 - E-E-A-T: author byline, credentials, date stamps
 - Word count vs SERP average
-- FAQ section + FAQPage schema
+- FAQ section as on-page content (no FAQPage schema)
 - Last updated: flag articles >6 months without refresh
 - Keyword placement: 6-floor check
 
@@ -754,7 +754,7 @@ WebSearch "[keyword]" → read top 10 result types/snippets → apply:
 SERP shows…                     Content format to match
 ─────────────────────────────────────────────────────────────────
 AI Overview (AIO) dominant    → citability-optimized article: direct answer in first 150w,
-                                 134-167w blocks per H3, named stats + expert quotes
+                                 120-180w self-contained H2 blocks, named stats + expert quotes
 Featured Snippet box          → structured content: H2=question, first 2-3 sentences = direct answer,
                                  add a definition or numbered list immediately after
 Video pack (3+ videos)        → create supporting long-form article + "watch time" alternative;

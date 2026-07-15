@@ -24,7 +24,8 @@ cited by AI engines — without ever inventing a fact.
    - **Citation magnets**: quotable stats, crisp definitions, named
      frameworks AI engines can lift with attribution
    - **6 keyword floors** met (primary + secondaries per brief)
-   - **FAQ section** + FAQPage JSON-LD schema
+   - **FAQ section** as on-page content — NO FAQPage/HowTo schema (QC P0);
+     schema = Article + BreadcrumbList + Speakable, separate JSON-LD block
    - Internal links to the brief's target pages, diversified anchors (F8)
 4. Language & voice per market: British English (SG clients), Bahasa
    Indonesia EYD V (rajawangi, kgteknik). Byline rules honored (Iman Yusoff

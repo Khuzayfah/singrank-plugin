@@ -197,8 +197,10 @@ Helps AI systems that read extended context for better citation accuracy.
 
 ### LAYER 3 — Content Citability Scoring
 
-**Optimal citation block: 134–167 words (self-contained)**
+**Optimal citation block: 120–180 words, self-contained (research optimum ~134–167w)**
 Source: Princeton GEO research (Aggarwal et al., KDD 2024) + practitioner consensus.
+Blocks live at the **H2 level** (flat H2-heavy structure per the Pattern Lab winner
+profile — H3 only for genuine sub-questions; FAQ question headings are exempt).
 
 **Per-page citability score card (0–100 points, consistent across all pages):**
 
@@ -208,7 +210,7 @@ CITABILITY SCORECARD — [URL]
 Signal                                      Points  Your Score
 ────────────────────────────────────────────────────────────
 Direct answer in first 150 words            25      [ ]
-≥3 self-contained H3 blocks of 134-167w    25      [ ]  (each block opens with answer)
+≥3 self-contained section blocks of 120-180w 25     [ ]  (each opens with the answer)
 ≥2 named expert quotes (name + title + org) 20      [ ]  (10pts each, max 20)
 ≥3 statistics with named source + year      15      [ ]  (5pts each, max 15)
 Content updated within last 3 months        15      [ ]
@@ -223,15 +225,15 @@ Interpretation:
 Action priority: score from LOWEST to HIGHEST → fix cheapest signals first.
   Easiest lift: update date (if ≤1mo away from 3-month threshold)
   Second: add 1 named stat with source (adds +5 points)
-  Third: restructure 1 H3 section into 134-167w self-contained block (+8 points)
+  Third: restructure 1 section into a 120-180w self-contained block (+8 points)
   Hardest: add expert quote (requires outreach or internal expert interview)
 ```
 
 **Citability audit per page — step by step:**
 1. Fetch raw HTML (`WebFetch`) — confirm content is SSR (not JS-injected); cross-check against the rendered DOM via `claude-in-chrome` if in doubt
 2. Extract first 150 words → does it answer the page's primary query directly? (Yes/No)
-3. For each H3 section: count words → target 134-167w per block
-4. For each H3: does the first 2 sentences answer the sub-question directly? (Yes/No)
+3. For each H2/H3 section: count words → target 120-180w per block
+4. For each section: do the first 2 sentences answer the sub-question directly? (Yes/No)
 5. Count named expert quotes (must have: name + title + organization)
 6. Count statistics with named source + year (e.g., "According to Singapore Tourism Board (2025)…")
 7. Check publish/update date in Article schema vs actual content recency
@@ -243,7 +245,7 @@ P_relative = 1.0 × ∏(1 + boost_i)
 
 Boosts (multiply per signal found):
   Direct answer first 150w:     × 1.55
-  Each 134-167w block (cap 5):  × 1.35 per block
+  Each 120-180w block (cap 5):  × 1.35 per block
   Each expert quote (cap 3):    × 1.41 per quote
   Each stat + named source:     × 1.30 per stat (cap 5)
   Fresh content <3 months:      × 3.00
@@ -427,7 +429,7 @@ LAYER 1 — Access:
 
 LAYER 2 — Structure:
 [ ] Primary answer in first 150 words
-[ ] Each H3 section: 134-167 words, self-contained, opens with direct answer
+[ ] Each H2 section: 120-180 words, self-contained, opens with direct answer (H3 sparing)
 [ ] Headings formatted as natural-language questions where appropriate
 [ ] At least 1 named expert quote with attribution per major H2
 [ ] At least 1 statistic with source + year per major H2

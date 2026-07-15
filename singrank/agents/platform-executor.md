@@ -22,8 +22,9 @@ delete.
 **Wix** (dehallsg, ifgshipping, livinmalaysia):
 - Writes go through `CallWixSiteAPI` — `ExecuteWixAPI` is read-only.
 - Edit published posts via Draft Posts action `UPDATE_PUBLISH`.
-- `relatedPostIds` max 3. FAQ schema via seoData script tag; site CSS via
-  custom-embeds HEAD.
+- `relatedPostIds` max 3. Schema via seoData script tag — Article/BreadcrumbList/
+  Speakable only, NEVER FAQPage/HowTo (deprecated, QC P0; strip legacy FAQPage
+  blocks whenever you touch a post that has one). Site CSS via custom-embeds HEAD.
 
 **Squarespace** (rajawangi.co.id — verified by live probe 2026-07-08, NOT Wix):
 - No Squarespace MCP connected — no API write path. Edits go through the

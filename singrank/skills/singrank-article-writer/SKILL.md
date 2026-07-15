@@ -359,7 +359,7 @@ Place keywords at these positions. Natural distribution beats density.
 | 1 | H1 title | Primary | Within first 5 words |
 | 2 | First 100 words | Primary | One natural use |
 | 3 | First or second H2 | Primary or secondary | One per H2 |
-| 4 | H3 subheadings | Long-tail or secondary | 3+ H3s use variants |
+| 4 | Question headings (question-form H2s + FAQ entries) | Long-tail or secondary | 3+ carry longtail variants |
 | 5 | Meta description | Primary | Within first 60 characters |
 | 6 | Last 100 words | Primary | One final natural mention |
 
@@ -404,6 +404,11 @@ Include the primary or secondary keyword in 30–60% of H2s — not every H2 nee
 primary. **≥2 H2s are the reader's literal question** (winner trait, +100% lift). Spread
 long-tail variants across H2s; H3s are the exception, not the scaffold (winners median 4
 H3 vs losers 17 — see `singrank-writing-craft` §1).
+
+**FAQ exemption:** FAQ question headings (whether `<h3>` or `<details><summary>`) are
+EXEMPT from the H3-sparing rule — they're the extraction format AI engines want and part
+of the winner profile (69.7% of winners carry a FAQ block). "H3-light" applies to the
+BODY structure only.
 
 ---
 

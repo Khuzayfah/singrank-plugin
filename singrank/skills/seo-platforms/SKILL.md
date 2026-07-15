@@ -92,7 +92,7 @@ CRITICAL: Do NOT include "memberId" in the body — strip it from any GET respon
       { "type": "meta", "props": { "name": "description", "content": "Meta desc 150-160 chars" } },
       { "type": "script",
         "props": { "type": "application/ld+json" },
-        "children": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",…}"
+        "children": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",…},{\"@type\":\"BreadcrumbList\",…}]}"
       }
     ],
     "slug": "url-slug-here"
@@ -100,8 +100,10 @@ CRITICAL: Do NOT include "memberId" in the body — strip it from any GET respon
 }
 ```
 The `script` entry in `seoData.tags` is how schema is injected on Wix — it persists in
-the `<head>` and survives content edits. Use this for ALL schema (Article, FAQPage,
-BreadcrumbList, LocalBusiness) on blog posts and pages.
+the `<head>` and survives content edits. Use this for ALL schema (Article,
+BreadcrumbList, Speakable, LocalBusiness) on blog posts and pages.
+**NEVER inject FAQPage/HowTo** (deprecated — QC P0); when editing a post that carries a
+legacy FAQPage block, strip it in the same write and keep the Q&A as visible content.
 
 **relatedPostIds:** maximum 3 IDs; must be valid published post IDs.
 
@@ -192,14 +194,17 @@ body = {
 }
 ```
 
-### Fix 2: Inject FAQPage schema
+### Fix 2: Inject Article + BreadcrumbList + Speakable schema (NEVER FAQPage — deprecated, QC P0)
 ```python
-faq_schema = json.dumps({
+page_schema = json.dumps({
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {"@type": "Question", "name": "Q1?", "acceptedAnswer": {"@type": "Answer", "text": "A1."}},
-        {"@type": "Question", "name": "Q2?", "acceptedAnswer": {"@type": "Answer", "text": "A2."}}
+    "@graph": [
+        {"@type": "Article", "headline": "<title>",
+         "author": {"@type": "Organization", "name": "<client byline>"},
+         "datePublished": "<ISO>", "dateModified": "<ISO>"},
+        {"@type": "BreadcrumbList", "itemListElement": []},
+        {"@type": "WebPage", "speakable": {"@type": "SpeakableSpecification",
+         "cssSelector": [".key-takeaway", "article > p:first-of-type"]}}
     ]
 }, ensure_ascii=False)
 
@@ -209,7 +214,7 @@ body = {
         "seoData": {
             "tags": [
                 # Keep existing title/meta tags, add schema:
-                {"type": "script", "props": {"type": "application/ld+json"}, "children": faq_schema}
+                {"type": "script", "props": {"type": "application/ld+json"}, "children": page_schema}
             ]
         }
     },
@@ -286,14 +291,20 @@ ALL schema must be injected at THEME level, not in body content.
 {% endif %}
 ```
 
-For FAQPage: inject keyed to article handle:
+For per-article Speakable (keyed to article handle — NEVER FAQPage/HowTo, deprecated QC P0):
 ```liquid
 {% if article.handle == 'target-article-handle' %}
 <script type="application/ld+json">
-{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": […] }
+{ "@context": "https://schema.org", "@type": "WebPage",
+  "speakable": { "@type": "SpeakableSpecification",
+  "cssSelector": [".key-takeaway", "article p:first-of-type"] } }
 </script>
 {% endif %}
 ```
+**Legacy cleanup rule:** RCS/IFG and other client themes may still carry FAQPage blocks
+from before the policy change (pre-Jul-2026). Whenever you touch a theme snippet or
+seoData that contains one, strip the FAQPage/HowTo block in the same edit — the visible
+Q&A content stays.
 
 ### SEO Meta on Shopify — metafields
 

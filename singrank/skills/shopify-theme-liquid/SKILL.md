@@ -282,11 +282,11 @@ structured data MUST be injected via theme Liquid, not content:
 {% endif %}
 ```
 
-Per-article dynamic schema from a metafield (proven pattern, RCS FAQ system):
-metafield `custom.faq` (type `json`, ownerType `ARTICLE`) holds
-`[{question, answer}]`; the section renders BOTH a visible accordion AND a
-separate FAQPage `<script>` block from the same data, guarded by a blank
-check so empty articles render nothing:
+Per-article dynamic FAQ from a metafield (proven pattern, RCS FAQ system —
+**updated for the anti-FAQPage policy, Jul 2026**): metafield `custom.faq`
+(type `json`, ownerType `ARTICLE`) holds `[{question, answer}]`; the section
+renders the visible accordion ONLY — **no FAQPage `<script>` block** (deprecated
+for rich results; QC P0). The Q&A content itself is what AI engines extract:
 
 ```liquid
 {% if article.metafields.custom.faq.value != blank %}
@@ -295,22 +295,15 @@ check so empty articles render nothing:
       <details><summary>{{ qa.question }}</summary><p>{{ qa.answer }}</p></details>
     {% endfor %}
   </div>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org", "@type": "FAQPage",
-    "mainEntity": [
-      {% for qa in article.metafields.custom.faq.value %}
-      { "@type": "Question", "name": {{ qa.question | json }},
-        "acceptedAnswer": { "@type": "Answer", "text": {{ qa.answer | json }} } }
-      {% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ]
-  }
-  </script>
 {% endif %}
 ```
 Set the metafield value via `metafieldsSet` (type `json`, value = stringified
 array) — separate mutation from theme files, but the two work together.
+
+**Legacy cleanup:** themes that still render a FAQPage `<script>` from this
+metafield (pre-Jul-2026 RCS pattern) → remove the script block when next
+touching that section file; keep the accordion. Add Speakable on the
+answer-first paragraphs instead if schema depth is wanted.
 
 ---
 

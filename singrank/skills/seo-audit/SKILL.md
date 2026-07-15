@@ -417,7 +417,7 @@ Quick AI-readiness check (full audit → use `seo-geo` skill):
 ✓ / ✗  robots.txt: GPTBot, ClaudeBot, PerplexityBot, Google-Extended all Allowed
 ✓ / ✗  /llms.txt present at root (hygiene only — never a Critical; see seo-geo Layer 2 evidence)
 ✓ / ✗  Key content is server-side rendered (not JS-injected)
-✓ / ✗  Self-contained answer blocks of ~134-167 words per H3
+✓ / ✗  Self-contained answer blocks of 120-180 words per H2 section (H3 sparing)
 ✓ / ✗  Primary answer appears in first 150 words of page
 ✓ / ✗  FAQ as answer-first on-page content (≥5 Q&A); NO FAQPage schema (P0 if present)
 ✓ / ✗  dateModified updated within 6 months
