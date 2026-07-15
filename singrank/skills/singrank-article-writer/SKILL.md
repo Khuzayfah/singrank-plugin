@@ -608,6 +608,13 @@ Target Flesch Reading Ease 60–70 (English) or the Bahasa Indonesia equivalent.
 
 After the HTML, output the full schema plan. On Shopify, deliver every block at theme level, keyed to the handle.
 
+**ALWAYS back up the finished article** (Claude Code): write a copy to
+`D:\SingRank SEO\<client-domain>\drafts\<slug>-YYYY-MM-DD.<md|html>` (move to
+`articles\` once approved/published), AND to SingRank Save
+(`put_document`, tag `article-draft`). Every article lives in two places — a local
+copy to copy-paste and a searchable MCP copy. In claude.ai/Desktop (no local FS), save
+to SingRank Save only; the user copies it into `D:\SingRank SEO\` manually.
+
 ---
 
 ## SCHEMA PLAN (allowed types only — engine-standard §4/§5)

@@ -225,6 +225,20 @@ memory, workflows) mirrored with a start-here `ECOSYSTEM.md` so any fresh
 session/agent understands everything even if this environment is lost. Refresh with
 `D:\database\sync.bat` after meaningful skill/memory changes.
 
+**Article workspace + backup: `D:\SingRank SEO\`** — one folder per client (16), each
+with `_INFO.md` (client card: platform/byline/language/compliance), `drafts\`, and
+`articles\`. EVERY article is backed up here (`<client>\articles\<slug>-DATE.<md|html>`)
+in addition to SingRank Save — a local copy to copy-paste + a searchable MCP copy.
+This is the user's writing workspace across all Claude surfaces.
+
+**Cross-surface note (Claude Code / Desktop / claude.ai chat):** the KNOWLEDGE +
+DATA + STANDARDS are global — SingRank System MCP (`brain{}` serves the manual + all
+tools), SingRank Save (skill docs + briefs), and MCP publishing work in every surface.
+The LOCAL tools (Python in `tools/`, the GPU model) run only where there's a shell
+(Claude Code). In claude.ai/Desktop: use the MCP data + brain + writing standards; the
+local-only tools (deep_research/qc_check/originality_check/smart_scrape/local model)
+are Claude Code exclusives.
+
 Rule of thumb: **search** with Claude's WebSearch; **fetch/verify/audit/QC** with these
 tools (deterministic, exit codes, repeatable).
 
