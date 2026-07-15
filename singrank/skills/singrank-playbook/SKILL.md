@@ -212,6 +212,7 @@ Path: `C:\Users\natur\singrank-plugin\singrank\tools\` (Python 3, requests+bs4 �
 | `web_research.py verify <url> "<claim>"` | Grade a claim vs the live page: EXACT / PARAPHRASE / NOT-FOUND (exit 1) | Factcheck EVERY stat before publish — NOT-FOUND = never publish |
 | `web_research.py search "<q>" [--site d] [--primary-only]` | Keyless search (Bing→DDG), flags gov/edu/official as primary. Best-effort: engines often blocked on ID networks → exit 2 tells you to use Claude's WebSearch instead | Finding sources (fallback: WebSearch) |
 | `qc_check.py <article.html> --base-url <domain> --lang <en\|id>` | Deterministic QC half (60/100 pts): live link check, capsule sizes, FAQ extractability, banned filler, burstiness, language-mix (P0), schema deprecation lint (P0), word floor. Exit 1 = P0 | Every article before publish (singrank-qc Step 1) |
+| `deep_research.py --keyword "<kw>" --urls <top10...>` | SERP top-10 teardown: benchmark (median words/tables/freshness/schema), coverage matrix (must-cover), ⭐ gap candidates (≤2 pages cover), question bank, fact bank with source URLs | Before writing any new article (singrank-deep-research Phase 2) |
 
 Rule of thumb: **search** with Claude's WebSearch; **fetch/verify/audit/QC** with these
 tools (deterministic, exit codes, repeatable).
@@ -316,6 +317,7 @@ exactly 1 EXISTING category + 3–5 tags. Never invent a new category.
 | "fix Wix" / "fix Shopify" / schema / meta (content/metafield level) | **seo-platforms** |
 | "edit theme" / "update Liquid" / "buat section" / "theme file" / "publish theme" | **shopify-theme-liquid** |
 | "tulis artikel" / "write article" | **singrank-article-writer** + **singrank-writing-craft** |
+| "artikel selanjutnya apa" / "cari gap" / "bedah top 10" / "deep research" | **singrank-deep-research** (or /seo-gap-article end-to-end) |
 | "improve copy" / "bikin persuasif" / "headline" / "judul CTR" / "psikologi marketing" / "storytelling" | **singrank-writing-craft** |
 | "laporan bulanan" / "monthly report" | `client_action_briefing` → **seo-agency** PB-8 |
 | "tren klien" / "how is X doing" | `brain{doc:'content'}` / `client_action_briefing` → **seo-kb** |

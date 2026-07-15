@@ -166,6 +166,21 @@ The article must read as hand-written by a specialist. AI-detection tools and sh
 ### Voice anchor
 Write as the named client byline would speak to a peer. Specific, direct, lightly opinionated, never breathless. If a sentence could sit in any company's blog, rewrite it with a detail only this client would know.
 
+### Deliberately imperfect — the "tidak sempurna" principle
+A perfectly polished article reads as machine output. Human experts leave fingerprints —
+keep them in ON PURPOSE (facts stay exact; only the POLISH is imperfect):
+- One opinion stated plainly without hedging ("Honestly, skip the premium laminate for
+  rental units"). An expert who never commits is not an expert.
+- Occasional asymmetry: one section noticeably longer because the topic deserves it;
+  one section two sentences because that's all it needs. Never uniform.
+- A parenthetical aside or a self-correction where natural ("— or, more accurately,
+  per square metre").
+- Let one transition be abrupt. Humans jump.
+- Concrete over complete: it's better to nail 3 scenarios deeply than list 7 shallowly.
+  Perfectionist completeness is an AI tell.
+- NEVER manufacture errors in facts, numbers, spelling, or grammar — imperfection lives
+  in rhythm, structure, and voice, not in accuracy.
+
 ### The SingRank depth test (run on every paragraph)
 This is what separates sharp human writing from competent AI filler. A draft fails if it reads smooth but says nothing only this client could say.
 
@@ -225,12 +240,21 @@ These three rules apply to every article and page SingRank ships — SingRank, R
 TITLE TAG (50–60 chars): …
 META DESCRIPTION (150–160 chars): …
 URL SLUG: …
-PRIMARY KEYWORD: …
-SECONDARY KEYWORDS: …
-SEARCH INTENT: …
+PRIMARY KEYWORD: …           (ONE keyword, ONE intent — never two)
+LONGTAILS (5–10): …          (from real GSC queries / keyword_research, each mapped
+                              to the H2 or FAQ entry that carries it)
+SEARCH INTENT + FUNNEL STAGE: …
+INTERNAL LINK TARGETS: …     (fromAnchor → toURL, all live-confirmed, ≥5)
+MONEY PAGE + CTA: …          (the ONE conversion target + client-calibrated CTA —
+                              an article without a money page is not an asset)
+SALES ANGLE: …               (one sentence: why the reader buys after this article)
+EMOTIONAL DRIVER: …          (one: status/security/relief/pride/FOMO/hope)
 SCHEMA: … (mark "theme-level" on Shopify)
 TARGET WORD COUNT: …
 ```
+Every item above must be FILLED before writing starts — the conversion path is decided
+at brief time, not bolted on at the end. Focus is sales: informational sections earn
+trust so the CTA converts; they are never decoration.
 
 ---
 
